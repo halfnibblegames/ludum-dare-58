@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://dnu2oyugc5pvh"]
+
+[ext_resource type="Script" uid="uid://ou5bsjq2w87w" path="res://src/Scenes/ControlPrompt.cs" id="1_q0am5"]
+
+[node name="ControllerPrompt" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_q0am5")
+
+[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(8, 8)

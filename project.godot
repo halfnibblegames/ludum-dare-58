@@ -1,0 +1,52 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="HalfNibbleGame"
+run/main_scene="uid://bn1xhxvduovxo"
+config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
+config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://src/Autoload/Global.cs"
+Prefabs="*res://src/Autoload/Prefabs.tscn"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
+window/stretch/mode="viewport"
+
+[dotnet]
+
+project/assembly_name="HalfNibbleGame"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/": "gray",
+"res://assets/": "blue",
+"res://builds/": "gray",
+"res://src/": "blue"
+}
+
+[rendering]
+
+textures/canvas_textures/default_texture_filter=0
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+2d/snap/snap_2d_transforms_to_pixel=true

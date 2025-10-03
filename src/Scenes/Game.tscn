@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cqrb5682t73m2"]
+
+[ext_resource type="Texture2D" uid="uid://xe0xdqucvs83" path="res://assets/fullscreen_placeholder.png" id="1_gb23r"]
+[ext_resource type="PackedScene" uid="uid://dnu2oyugc5pvh" path="res://src/Scenes/ControlPrompt.tscn" id="2_i36l2"]
+
+[node name="Game" type="Node2D"]
+
+[node name="Extent" type="Marker2D" parent="."]
+position = Vector2(320, 180)
+gizmo_extents = 4.0
+
+[node name="FullscreenPlaceholder" type="Sprite2D" parent="."]
+position = Vector2(160, 90)
+scale = Vector2(1.66667, 1.66667)
+texture = ExtResource("1_gb23r")
+
+[node name="ControllerPrompt" parent="." instance=ExtResource("2_i36l2")]
+offset_left = 6.0
+offset_top = 7.0
+offset_right = 22.0
+offset_bottom = 23.0
+ShownInput = 1

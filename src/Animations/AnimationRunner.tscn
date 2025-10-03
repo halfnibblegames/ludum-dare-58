@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://kpvcj41byjv6"]
+
+[ext_resource type="Script" uid="uid://b17f87ad5vn5" path="res://src/Animations/AnimationRunner.cs" id="1_lwugd"]
+
+[node name="AnimationRunner" type="Node"]
+script = ExtResource("1_lwugd")

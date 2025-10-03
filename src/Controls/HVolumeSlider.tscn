@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://ci1x8kyywb0ap"]
+
+[ext_resource type="Script" uid="uid://csrxiplss5tq3" path="res://src/Controls/VolumeSlider.cs" id="1_5b25d"]
+
+[node name="VolumeSlider" type="Control"]
+custom_minimum_size = Vector2(64, 16)
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_5b25d")
+
+[node name="HSlider" type="HSlider" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+max_value = 1.0
+step = 0.05

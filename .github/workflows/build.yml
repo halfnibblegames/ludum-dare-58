@@ -1,0 +1,41 @@
+name: "Build"
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [windows, linux] # disable mac for now
+
+    steps:
+      - name: 🧾 Checkout
+        uses: actions/checkout@v4
+
+      - name: 💽 Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8
+
+      - name: 📦 Restore dependencies
+        run: dotnet restore
+
+      - name: 🔨 Build project
+        id: build
+        uses: manleydev/build-godot-action@master
+        with:
+          name: jam-template
+          preset: ${{ matrix.platform }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.platform }}
+          path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
+          retention-days: 1

@@ -1,0 +1,128 @@
+[gd_scene load_steps=12 format=3 uid="uid://b3cwit3wn6fip"]
+
+[ext_resource type="Texture2D" uid="uid://cl6eiobun482" path="res://assets/brand/strawberry_bite.png" id="1_7e4jp"]
+[ext_resource type="Script" uid="uid://cihyiqg1v6bti" path="res://src/Scenes/Splash.cs" id="1_ll5sv"]
+[ext_resource type="PackedScene" uid="uid://kpvcj41byjv6" path="res://src/Animations/AnimationRunner.tscn" id="2_0hxrq"]
+[ext_resource type="AudioStream" uid="uid://bixa32t73a1a" path="res://assets/brand/bite.mp3" id="2_n8shk"]
+[ext_resource type="FontFile" uid="uid://ci4lie1o50owg" path="res://assets/brand/Monocons.ttf" id="5_bvlhc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3pwrt"]
+atlas = ExtResource("1_7e4jp")
+region = Rect2(0, 0, 35, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8n7v0"]
+atlas = ExtResource("1_7e4jp")
+region = Rect2(35, 0, 35, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71v08"]
+atlas = ExtResource("1_7e4jp")
+region = Rect2(70, 0, 35, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5b7fy"]
+atlas = ExtResource("1_7e4jp")
+region = Rect2(0, 35, 35, 35)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7emix"]
+atlas = ExtResource("1_7e4jp")
+region = Rect2(35, 35, 35, 35)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_uwvua"]
+animations = [{
+"frames": [{
+"duration": 26.6667,
+"texture": SubResource("AtlasTexture_3pwrt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8n7v0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71v08")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5b7fy")
+}, {
+"duration": 20.0,
+"texture": SubResource("AtlasTexture_7emix")
+}],
+"loop": false,
+"name": &"Bite",
+"speed": 34.0
+}]
+
+[node name="Splash" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ll5sv")
+
+[node name="AnimationRunner" parent="." instance=ExtResource("2_0hxrq")]
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0941176, 0.0941176, 0.0941176, 1)
+
+[node name="Strawberry" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+position = Vector2(640, 240)
+scale = Vector2(8, 8)
+sprite_frames = SubResource("SpriteFrames_uwvua")
+animation = &"Bite"
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": false,
+"output_section": true,
+"pending_changes": {},
+"slice_section": false
+}
+metadata/_aseprite_wizard_config_ = {
+"layer": "",
+"o_ex_p": "",
+"o_folder": "res://assets/brand",
+"o_name": "",
+"only_visible": false,
+"slice": "",
+"source": "res://assets/brand/strawberry_bite.aseprite"
+}
+metadata/_aseprite_wizard_source_file_hash_ = "04de7cb78e1460d72ad8e8c111b55ce5"
+
+[node name="BiteSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_n8shk")
+pitch_scale = 0.85
+
+[node name="Copyright" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -640.0
+offset_top = 42.0
+offset_right = -320.0
+offset_bottom = 66.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(4, 4)
+theme_override_fonts/font = ExtResource("5_bvlhc")
+text = "Half Nibble games"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_characters_behavior = 1
+visible_ratio = 0.0
+
+[node name="FadeRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0941176, 0.0941176, 0.0941176, 0)
