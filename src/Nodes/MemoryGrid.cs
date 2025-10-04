@@ -1,15 +1,14 @@
 using Godot;
 using HalfNibbleGame.Autoload;
-using HalfNibbleGame.Nodes.Systems;
 using HalfNibbleGame.Scenes;
 
 namespace HalfNibbleGame.Nodes;
 
 public partial class MemoryGrid : Node2D {
-  private const int width = 8;
-  private const int height = 8;
-  private const float blockSize = 16;
-  private const float blockMargin = 3;
+  private const int width = 10;
+  private const int height = 7;
+  private const float blockSize = 18;
+  private const float blockMargin = 1;
 
   private MemoryBlock[] blocks = [];
 
@@ -21,8 +20,8 @@ public partial class MemoryGrid : Node2D {
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
     blocks = new MemoryBlock[width * height];
-    for (var y = 0; y < width; y++)
-    for (var x = 0; x < height; x++) {
+    for (var y = 0; y < height; y++)
+    for (var x = 0; x < width; x++) {
       var node = Global.Prefabs.MemoryBlock.Instantiate<MemoryBlock>();
       node.Position = new Vector2((x + 0.5f) * (blockSize + blockMargin), (y + 0.5f) * (blockSize + blockMargin));
       this[x, y] = node;

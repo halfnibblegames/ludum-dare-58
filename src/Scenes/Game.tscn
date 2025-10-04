@@ -24,14 +24,14 @@ position = Vector2(160, 90)
 texture = ExtResource("2_mm2k5")
 
 [node name="TaskManager" parent="." instance=ExtResource("3_6wgcs")]
-position = Vector2(17, 12)
+position = Vector2(111, 12)
 
 [node name="Extent" type="Marker2D" parent="."]
 position = Vector2(320, 180)
 gizmo_extents = 4.0
 
 [node name="MemoryGrid" type="Node2D" parent="."]
-position = Vector2(129, 12)
+position = Vector2(109, 25)
 script = ExtResource("4_6wgcs")
 
 [node name="ProgressBar" type="ReferenceRect" parent="."]
