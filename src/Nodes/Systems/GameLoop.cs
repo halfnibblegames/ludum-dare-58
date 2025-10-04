@@ -23,14 +23,25 @@ public sealed partial class GameLoop : Node {
     CallDeferred(nameof(startComputerSimulation));
   }
 
+  public override void _Process(double delta) {
+    if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) {
+      startComputerSimulation();
+    }
+  }
+
+  public void InterruptGarbageCollecting() {
+    // TODO: error sound
+    startComputerSimulation();
+  }
+
   private void startGarbageCollecting() {
     IsGarbageCollecting = true;
     garbageCollectTimer = GetTree().CreateTimer(GarbageCollectionDuration);
-    Animations.Animations.DoDelayed(GarbageCollectionDuration, startComputerSimulation);
   }
 
   private void startComputerSimulation() {
     IsGarbageCollecting = false;
+    garbageCollectTimer?.Dispose();
     garbageCollectTimer = null;
 
     var taskManager = Global.Services.Get<ITaskManager>();

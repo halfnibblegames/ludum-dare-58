@@ -3,6 +3,7 @@ using System.Linq;
 using Godot;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Nodes;
+using HalfNibbleGame.Nodes.Systems;
 
 namespace HalfNibbleGame.Scenes;
 
@@ -13,6 +14,7 @@ public interface ITaskManager {
   void AllocateProgram(string programName, int memoryNeeded);
   void AddMemoryToProcess(Program program, int memoryAdded);
   void KillProcess(Program program);
+  void OnMemoryFreed(Program program, MemoryBlock memoryBlock);
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
@@ -75,6 +77,15 @@ public partial class TaskManager : Node2D, ITaskManager {
     // Remove from the UI.
     var childToRemove = programListContainer.GetChildren()[index];
     programListContainer.RemoveChild(childToRemove);
+  }
+
+  public void OnMemoryFreed(Program program, MemoryBlock memoryBlock) {
+    if (programs.Contains(program)) {
+      // Uh oh
+      memoryBlock.Corrupt();
+      KillProcess(program);
+      Global.Services.Get<GameLoop>().InterruptGarbageCollecting();
+    }
   }
 
   public override void _Ready() {

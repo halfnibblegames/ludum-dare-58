@@ -10,7 +10,8 @@ public partial class MemoryBlock : Area2D {
 
   [Export] private Color freeColor = new(0.5f, 0.5f, 0.5f);
 
-  public bool IsFree => assignedProgram is null;
+  private bool isCorrupted;
+  public bool IsFree => assignedProgram is null && !isCorrupted;
 
   public override void _Ready() {
     setColor(freeColor);
@@ -25,8 +26,10 @@ public partial class MemoryBlock : Area2D {
   private void freeMemory() {
     if (assignedProgram is null) return;
 
+    var program = assignedProgram;
     setColor(freeColor);
     assignedProgram = null;
+    Global.Services.Get<ITaskManager>().OnMemoryFreed(program, this);
   }
 
   public void AssignProgram(Program program) {
@@ -34,6 +37,11 @@ public partial class MemoryBlock : Area2D {
 
     assignedProgram = program;
     setColor(program.Color);
+  }
+
+  public void Corrupt() {
+    isCorrupted = true;
+    setColor(new Color(0, 0, 0));
   }
 
   private void setColor(Color c) {
