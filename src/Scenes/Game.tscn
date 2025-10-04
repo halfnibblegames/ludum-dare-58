@@ -23,5 +23,5 @@ position = Vector2(320, 180)
 gizmo_extents = 4.0
 
 [node name="MemoryGrid" type="Node2D" parent="."]
-position = Vector2(129, 17)
+position = Vector2(129, 12)
 script = ExtResource("4_6wgcs")

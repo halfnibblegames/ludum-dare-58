@@ -9,7 +9,7 @@ public partial class MemoryGrid : Node2D {
   [Export] private int width = 10;
   [Export] private int height = 10;
   [Export] private float blockSize = 12;
-  [Export] private float blockMargin = 4;
+  [Export] private float blockMargin = 3;
 
   private MemoryBlock[] blocks = [];
 

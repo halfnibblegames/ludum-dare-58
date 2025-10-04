@@ -7,7 +7,7 @@ public partial class MemoryBlock : Area2D {
   public override void _Input(InputEvent @event) {
     // 😭
     if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseEvent) {
-      if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().HasPoint(mouseEvent.Position - Position)) {
+      if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().HasPoint(mouseEvent.Position - GlobalPosition)) {
         freeMemory();
       }
     }
