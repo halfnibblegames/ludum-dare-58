@@ -10,7 +10,6 @@ offset_right = 1280.0
 offset_bottom = 720.0
 
 [node name="PixelPerfectViewport" type="SubViewport" parent="PixelPerfectContainer"]
-handle_input_locally = false
 canvas_item_default_texture_filter = 0
 physics_object_picking = true
 size = Vector2i(1280, 720)
