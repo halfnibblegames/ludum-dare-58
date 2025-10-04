@@ -6,12 +6,14 @@ namespace HalfNibbleGame.Nodes.Systems;
 
 public sealed partial class GameLoop : Node {
 
-  private static RandomNumberGenerator rng = new();
+  private static readonly RandomNumberGenerator rng = new();
 
-  [Export] private float garbageCollectionDuration = 4f;
+  [Export] public float GarbageCollectionDuration = 4f;
   [Export] private float simulationDuration = 4f;
 
   public bool IsGarbageCollecting { get; private set; }
+  public double GarbageCollectingTimeLeft => garbageCollectTimer?.TimeLeft ?? 0;
+  private SceneTreeTimer? garbageCollectTimer;
 
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
@@ -20,14 +22,21 @@ public sealed partial class GameLoop : Node {
 
   private void startGarbageCollecting() {
     IsGarbageCollecting = true;
-    Animations.Animations.DoDelayed(garbageCollectionDuration, startComputerSimulation);
+    garbageCollectTimer = GetTree().CreateTimer(GarbageCollectionDuration);
+    Animations.Animations.DoDelayed(GarbageCollectionDuration, startComputerSimulation);
   }
 
   private void startComputerSimulation() {
     IsGarbageCollecting = false;
-    Global.Services.Get<MemoryGrid>().AllocateProgram(new ProgramPlaceholder(randomColor()), 6);
-    // Animations.Animations.DoDelayed(SimulationDuration, startGarbageCollecting);
-    startGarbageCollecting();
+    garbageCollectTimer = null;
+
+    var grid = Global.Services.Get<MemoryGrid>();
+    for (var i = 0; i < 3; i++) {
+      Animations.Animations.DoDelayed(
+        rng.RandfRange(0, simulationDuration),
+        () => grid.AllocateProgram(new ProgramPlaceholder(randomColor()), rng.RandiRange(3, 8)));
+    }
+    Animations.Animations.DoDelayed(simulationDuration, startGarbageCollecting);
   }
 
   private record ProgramPlaceholder(Color Color) : IProgram {
