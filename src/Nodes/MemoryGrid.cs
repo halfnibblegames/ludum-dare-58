@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Nodes.Systems;
@@ -19,6 +20,8 @@ public partial class MemoryGrid : Node2D {
     set => blocks[x + y * width] = value;
   }
 
+  public float MemoryUsage { get; private set; }
+
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
     blocks = new MemoryBlock[width * height];
@@ -29,6 +32,10 @@ public partial class MemoryGrid : Node2D {
       this[x, y] = node;
       AddChild(node);
     }
+  }
+
+  public override void _Process(double delta) {
+    MemoryUsage = (float) blocks.Count(b => !b.IsFree) / blocks.Length;
   }
 
   public override void _Input(InputEvent @event) {

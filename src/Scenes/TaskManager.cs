@@ -9,6 +9,8 @@ namespace HalfNibbleGame.Scenes;
 
 public interface ITaskManager {
   IReadOnlyList<Program> Programs { get; }
+  float MemoryUsage { get; }
+
   Color GetNextColor();
   void AllocateProgram(Program program, int memoryNeeded);
   void AddMemoryToProcess(Program program, int memoryAdded);
@@ -39,7 +41,10 @@ public partial class TaskManager : Node2D, ITaskManager {
   private readonly List<Program> programs = [];
   private VBoxContainer programListContainer = null!;
 
+  private MemoryGrid memoryGrid => Global.Services.Get<MemoryGrid>();
+
   public IReadOnlyList<Program> Programs => programs;
+  public float MemoryUsage => memoryGrid.MemoryUsage;
 
   public Color GetNextColor() {
     // Pick the first available color from the available pool.
@@ -62,7 +67,7 @@ public partial class TaskManager : Node2D, ITaskManager {
   }
 
   public void AddMemoryToProcess(Program program, int memoryAdded) {
-    Global.Services.Get<MemoryGrid>().AllocateProgram(program, memoryAdded);
+    memoryGrid.AllocateProgram(program, memoryAdded);
   }
 
   public void KillProcess(Program program) {

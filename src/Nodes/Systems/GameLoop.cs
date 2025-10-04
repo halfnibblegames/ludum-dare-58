@@ -15,6 +15,8 @@ public sealed partial class GameLoop : Node {
   private SceneTreeTimer? garbageCollectTimer;
   [Export] private float simulationDuration = 4f;
 
+  [Export] private Graph? memoryGraph;
+
   public bool IsGarbageCollecting { get; private set; }
   public double GarbageCollectingTimeLeft => garbageCollectTimer?.TimeLeft ?? 0;
 
@@ -40,11 +42,14 @@ public sealed partial class GameLoop : Node {
   }
 
   private void startComputerSimulation() {
+    var taskManager = Global.Services.Get<ITaskManager>();
+
+    memoryGraph?.PushDataPoint(taskManager.MemoryUsage);
+
     IsGarbageCollecting = false;
     garbageCollectTimer?.Dispose();
     garbageCollectTimer = null;
 
-    var taskManager = Global.Services.Get<ITaskManager>();
     planCycle(taskManager);
 
     Animations.Animations.DoDelayed(simulationDuration, startGarbageCollecting);

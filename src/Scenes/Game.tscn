@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cqrb5682t73m2"]
+[gd_scene load_steps=9 format=3 uid="uid://cqrb5682t73m2"]
 
 [ext_resource type="Script" uid="uid://cqj4dlnwtlshm" path="res://src/Nodes/Systems/GameLoop.cs" id="1_bg83v"]
 [ext_resource type="PackedScene" uid="uid://kpvcj41byjv6" path="res://src/Animations/AnimationRunner.tscn" id="1_f61ph"]
@@ -7,13 +7,15 @@
 [ext_resource type="PackedScene" uid="uid://cuiw8v0h58o2x" path="res://src/Scenes/TaskManager.tscn" id="3_6wgcs"]
 [ext_resource type="Script" uid="uid://cl1a1im5yk7fm" path="res://src/Nodes/MemoryGrid.cs" id="4_6wgcs"]
 [ext_resource type="Script" uid="uid://b6h8hf1x6xsfp" path="res://src/Nodes/ProgressBar.cs" id="7_35kcs"]
+[ext_resource type="PackedScene" uid="uid://cdar3bpapjaca" path="res://src/Scenes/Graph.tscn" id="8_2xgsq"]
 
 [node name="Game" type="Node2D"]
 
 [node name="AnimationRunner" parent="." instance=ExtResource("1_f61ph")]
 
-[node name="GameLoop" type="Node" parent="."]
+[node name="GameLoop" type="Node" parent="." node_paths=PackedStringArray("memoryGraph")]
 script = ExtResource("1_bg83v")
+memoryGraph = NodePath("../Graph")
 
 [node name="Wallpaper" type="Sprite2D" parent="."]
 position = Vector2(160, 90)
@@ -47,3 +49,6 @@ anchors_preset = 9
 anchor_bottom = 1.0
 grow_vertical = 2
 color = Color(0.9121169, 0.49450552, 0.25197247, 1)
+
+[node name="Graph" parent="." instance=ExtResource("8_2xgsq")]
+position = Vector2(188, 167)

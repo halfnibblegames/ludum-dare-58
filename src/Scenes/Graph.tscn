@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cdar3bpapjaca"]
+
+[ext_resource type="Script" uid="uid://befe5ppud2ekk" path="res://src/Scenes/Graph.cs" id="1_xusxu"]
+
+[node name="Graph" type="Node2D"]
+script = ExtResource("1_xusxu")
+
+[node name="DataLine" type="Line2D" parent="."]
+width = 0.5
+
+[node name="Reference" type="ReferenceRect" parent="."]
+offset_right = 32.0
+offset_bottom = 12.0
+border_color = Color(1, 0, 1, 1)
