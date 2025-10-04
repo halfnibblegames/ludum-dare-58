@@ -6,10 +6,10 @@ namespace HalfNibbleGame.Nodes;
 
 public partial class MemoryGrid : Node2D {
 
-  [Export] private int width = 10;
-  [Export] private int height = 10;
-  [Export] private float blockSize = 12;
-  [Export] private float blockMargin = 3;
+  private const int width = 8;
+  private const int height = 8;
+  private const float blockSize = 16;
+  private const float blockMargin = 3;
 
   private MemoryBlock[] blocks = [];
 
@@ -23,6 +23,22 @@ public partial class MemoryGrid : Node2D {
         this[x, y] = node;
         AddChild(node);
       }
+    }
+  }
+
+  public override void _Input(InputEvent @event) {
+    if (@event is InputEventMouseButton { ButtonIndex: MouseButton.Left } mouseButton) {
+      simulateClickAt(mouseButton.Position);
+    }
+
+    if (@event is InputEventMouseMotion mouseMotion && mouseMotion.ButtonMask.HasFlag(MouseButtonMask.Left)) {
+      simulateClickAt(mouseMotion.Position);
+    }
+  }
+
+  private void simulateClickAt(Vector2 position) {
+    foreach (var b in blocks) {
+      b.TrySimulateClick(position);
     }
   }
 

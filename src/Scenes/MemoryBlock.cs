@@ -17,13 +17,10 @@ public partial class MemoryBlock : Area2D {
     setColor(freeColor);
   }
 
-  public override void _Input(InputEvent @event) {
-    // 😭
-    if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseEvent) {
-      if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().HasPoint(mouseEvent.Position - GlobalPosition) &&
-          Global.Services.Get<GameLoop>().IsGarbageCollecting) {
-        freeMemory();
-      }
+  public void TrySimulateClick(Vector2 position) {
+    if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().Grow(1).HasPoint(position - GlobalPosition) &&
+        Global.Services.Get<GameLoop>().IsGarbageCollecting) {
+      freeMemory();
     }
   }
 
