@@ -65,7 +65,7 @@ public sealed partial class GameLoop : Node {
     var programsToClose = programs.Take(closeCount).ToList();
     var programsToModify = programs.Skip(closeCount).Take(modifyCount).ToList();
     var programsToOpen =
-      Enumerable.Range(0, openCount).Select(_ => new ProgramDescription("asd", rng.RandiRange(3, 8)));
+      selectRandomNames(taskManager, openCount).Select(name => new ProgramDescription(name, rng.RandiRange(3, 8)));
 
     foreach (var p in programsToClose) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => taskManager.KillProcess(p));
@@ -80,6 +80,18 @@ public sealed partial class GameLoop : Node {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
         () => taskManager.AllocateProgram(p.Name, p.MemoryFootprint));
     }
+  }
+
+  private IList<string> selectRandomNames(ITaskManager taskManager, int count) {
+    var existingNames = taskManager.Programs.Select(p => p.Name).ToHashSet();
+    var availableNames = TaskManager.AvailableProgramNames.Where(n => !existingNames.Contains(n)).ToList();
+    Random.Shared.Shuffle(CollectionsMarshal.AsSpan(availableNames));
+
+    if (availableNames.Count >= count) {
+      return availableNames[..count];
+    }
+
+    return availableNames.Concat(Enumerable.Range(0, count - availableNames.Count).Select(i => $"Program{i}")).ToList();
   }
 
   private record ProgramDescription(string Name, int MemoryFootprint);

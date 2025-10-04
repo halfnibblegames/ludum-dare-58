@@ -37,6 +37,22 @@ public partial class TaskManager : Node2D, ITaskManager {
     Colors.Pink
   ];
 
+  public static readonly List<string> AvailableProgramNames = [
+    "PhotoStore",
+    "Goggle Ride",
+    "Goggle Vroom",
+    "Disharmony",
+    "EarthMammal",
+    "Gopoint",
+    "Paint4D",
+    "Watervapor",
+    "Manufacturio",
+    "Underwatch",
+    "Recycling bin",
+    "VisageTome Messenger",
+    "Cosmic Critter Chess"
+  ];
+
   private readonly List<Program> programs = [];
   private VBoxContainer programListContainer = null!;
 
