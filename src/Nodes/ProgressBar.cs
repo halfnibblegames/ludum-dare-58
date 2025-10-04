@@ -4,8 +4,7 @@ using HalfNibbleGame.Nodes.Systems;
 
 namespace HalfNibbleGame.Nodes;
 
-public partial class ProgressBar : ReferenceRect
-{
+public partial class ProgressBar : ReferenceRect {
   public override void _Process(double delta) {
     var gameLoop = Global.Services.Get<GameLoop>();
     var timeLeft = gameLoop.GarbageCollectingTimeLeft;

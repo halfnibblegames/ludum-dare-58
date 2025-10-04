@@ -7,12 +7,12 @@ public partial class ControlPrompt : Control {
   private const int tileSize = 16;
   private const double animationSpeed = 3;
 
-  private Texture2D? imageTexture;
+  private AnimatedSprite2D? animatedSprite;
   private int iconsPerRow;
 
-  private AnimatedSprite2D? animatedSprite;
-  private SpriteFrames spriteFrames = new();
+  private Texture2D? imageTexture;
   private ControlInput shownInput;
+  private SpriteFrames spriteFrames = new();
 
   [Export]
   public ControlInput ShownInput {
@@ -30,16 +30,14 @@ public partial class ControlPrompt : Control {
 
   private void updateAnimation() {
     var animationName = animationKey(shownInput);
-    if (spriteFrames.HasAnimation(animationName) || loadAnimation(shownInput)) {
-      animatedSprite?.Play(animationName);
-    }
+    if (spriteFrames.HasAnimation(animationName) || loadAnimation(shownInput)) animatedSprite?.Play(animationName);
   }
 
   private bool loadAnimation(ControlInput input) {
     imageTexture ??= loadTexture(out iconsPerRow);
-    if (imageTexture is null) { // Texture might not be loaded if we're not on the main thread.
+    if (imageTexture is null)
+      // Texture might not be loaded if we're not on the main thread.
       return false;
-    }
 
     var key = animationKey(input);
     var data = createData(input);
@@ -61,7 +59,9 @@ public partial class ControlPrompt : Control {
     return texture;
   }
 
-  private AtlasTexture atlas(int frameNo) => new() { Atlas = imageTexture!, Region = regionForFrame(frameNo) };
+  private AtlasTexture atlas(int frameNo) {
+    return new AtlasTexture { Atlas = imageTexture!, Region = regionForFrame(frameNo) };
+  }
 
   private Rect2 regionForFrame(int frameNo) {
     var row = frameNo / iconsPerRow;
@@ -69,5 +69,7 @@ public partial class ControlPrompt : Control {
     return new Rect2(col * tileSize, row * tileSize, tileSize, tileSize);
   }
 
-  private static string animationKey(ControlInput input) => input.ToString();
+  private static string animationKey(ControlInput input) {
+    return input.ToString();
+  }
 }

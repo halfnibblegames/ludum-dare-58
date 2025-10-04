@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://de86j2tjnmtes"]
+
+[ext_resource type="Script" uid="uid://bu15vkhqiadyf" path="res://src/Scenes/ProgramListEntry.cs" id="1_o02db"]
+
+[node name="ProgramListEntry" type="HBoxContainer"]
+custom_minimum_size = Vector2(400, 40)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -880.0
+offset_bottom = -680.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o02db")
+
+[node name="StartMargin" type="Control" parent="."]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 2
+
+[node name="Color" type="ColorRect" parent="."]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="TextMargin" type="Control" parent="."]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="Name" type="Label" parent="."]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Photoshop"
+vertical_alignment = 1

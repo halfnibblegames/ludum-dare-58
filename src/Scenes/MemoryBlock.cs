@@ -6,10 +6,9 @@ using HalfNibbleGame.Nodes.Systems;
 namespace HalfNibbleGame.Scenes;
 
 public partial class MemoryBlock : Area2D {
+  private Program? assignedProgram;
 
   [Export] private Color freeColor = new(0.5f, 0.5f, 0.5f);
-
-  private IProgram? assignedProgram;
 
   public bool IsFree => assignedProgram is null;
 
@@ -19,30 +18,25 @@ public partial class MemoryBlock : Area2D {
 
   public void TrySimulateClick(Vector2 position) {
     if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().Grow(1).HasPoint(position - GlobalPosition) &&
-        Global.Services.Get<GameLoop>().IsGarbageCollecting) {
+        Global.Services.Get<GameLoop>().IsGarbageCollecting)
       freeMemory();
-    }
   }
 
   private void freeMemory() {
     if (assignedProgram is null) return;
 
-    assignedProgram.MemoryFreed();
-	  setColor(freeColor);
+    setColor(freeColor);
     assignedProgram = null;
   }
 
-  public void AssignProgram(IProgram program) {
+  public void AssignProgram(Program program) {
     if (assignedProgram is not null) throw new InvalidOperationException();
 
     assignedProgram = program;
     setColor(program.Color);
   }
 
-  private void setColor(Color c) => GetNode<ColorRect>("ColorRect").Color = c;
-}
-
-public interface IProgram {
-  Color Color { get; }
-  void MemoryFreed();
+  private void setColor(Color c) {
+    GetNode<ColorRect>("ColorRect").Color = c;
+  }
 }
