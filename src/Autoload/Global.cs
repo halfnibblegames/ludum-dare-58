@@ -3,6 +3,11 @@ using Godot;
 namespace HalfNibbleGame.Autoload;
 
 public sealed partial class Global : Node {
+
+  [ExportCategory("Experiments")]
+  [Export] public bool DimFreeMemory;
+  [Export] public bool FreeAdjacentMemory;
+
   public static IServiceProvider Services => Instance.services;
 
   private static Prefabs? prefabs;

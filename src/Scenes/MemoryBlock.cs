@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using Godot;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Nodes.Systems;
@@ -6,35 +7,46 @@ using HalfNibbleGame.Nodes.Systems;
 namespace HalfNibbleGame.Scenes;
 
 public partial class MemoryBlock : Area2D {
-  private Program? assignedProgram;
+  public Program? AssignedProgram { get; private set; }
 
   [Export] private Color freeColor = new(0.5f, 0.5f, 0.5f);
 
   private bool isCorrupted;
-  public bool IsFree => assignedProgram is null && !isCorrupted;
+  public bool IsFree => AssignedProgram is null && !isCorrupted;
 
   public override void _Ready() {
     setColor(freeColor);
   }
 
-  public void TrySimulateClick(Vector2 position) {
-    if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().Grow(1).HasPoint(position - GlobalPosition) &&
-        Global.Services.Get<GameLoop>().IsGarbageCollecting)
-      freeMemory();
+  public override void _Process(double delta) {
+    if (Global.Instance.DimFreeMemory && AssignedProgram is { IsDead: true }) {
+      setColor(c => new Color(c.R, c.G, c.B, 0.5f));
+    }
   }
 
-  private void freeMemory() {
-    if (assignedProgram is null) return;
+  public bool TrySimulateClick(Vector2 position, [NotNullWhen(true)] out Program? freedProgram) {
+    freedProgram = null;
 
+    if (AssignedProgram is null) return false;
+
+    var hitbox = GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().Grow(1);
+    if (!hitbox.HasPoint(position - GlobalPosition)) return false;
+
+    freedProgram = AssignedProgram;
+    FreeMemory();
+    return true;
+  }
+
+  public void FreeMemory() {
     setColor(freeColor);
-    assignedProgram.OnMemoryFreed(this);
-    assignedProgram = null;
+    AssignedProgram!.OnMemoryFreed(this);
+    AssignedProgram = null;
   }
 
   public void AssignProgram(Program program) {
-    if (assignedProgram is not null) throw new InvalidOperationException();
+    if (AssignedProgram is not null) throw new InvalidOperationException();
 
-    assignedProgram = program;
+    AssignedProgram = program;
     program.OnMemoryAllocated(this);
     setColor(program.Color);
   }
@@ -45,6 +57,12 @@ public partial class MemoryBlock : Area2D {
   }
 
   private void setColor(Color c) {
-    GetNode<ColorRect>("ColorRect").Color = c;
+    setColor(_ => c);
+  }
+
+  private void setColor(Func<Color, Color> f) {
+    var rect = GetNode<ColorRect>("ColorRect");
+    var color = f(rect.Color);
+    rect.Color = color;
   }
 }

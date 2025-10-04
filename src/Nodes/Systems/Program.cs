@@ -6,7 +6,7 @@ using HalfNibbleGame.Scenes;
 namespace HalfNibbleGame.Nodes.Systems;
 
 public class Program(ITaskManager taskManager, string name, Color color) {
-  protected bool IsDead;
+  public bool IsDead { get; private set; }
   protected readonly HashSet<MemoryBlock> AllocatedMemory = [];
 
   // Should this program crash when memory is freed?
