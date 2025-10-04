@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://d23snmwthqpdf" path="res://assets/wallpaper.png" id="1_i36l2"]
 [ext_resource type="Texture2D" uid="uid://88mwqghf20cc" path="res://assets/taskbar.png" id="2_mm2k5"]
 [ext_resource type="PackedScene" uid="uid://cuiw8v0h58o2x" path="res://src/Scenes/TaskManager.tscn" id="3_6wgcs"]
-[ext_resource type="PackedScene" uid="uid://bdssvaj4laelm" path="res://src/Scenes/MemoryBlock.tscn" id="3_mm2k5"]
+[ext_resource type="Script" uid="uid://cl1a1im5yk7fm" path="res://src/Nodes/MemoryGrid.cs" id="4_6wgcs"]
 
 [node name="Game" type="Node2D"]
 
@@ -22,8 +22,6 @@ position = Vector2(17, 12)
 position = Vector2(320, 180)
 gizmo_extents = 4.0
 
-[node name="MemoryBlock" parent="." instance=ExtResource("3_mm2k5")]
-position = Vector2(42, 62)
-
-[node name="MemoryBlock2" parent="." instance=ExtResource("3_mm2k5")]
-position = Vector2(6, 6)
+[node name="MemoryGrid" type="Node2D" parent="."]
+position = Vector2(129, 17)
+script = ExtResource("4_6wgcs")
