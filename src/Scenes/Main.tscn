@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bn1xhxvduovxo"]
+[gd_scene load_steps=2 format=3 uid="uid://bn1xhxvduovxo"]
 
 [ext_resource type="PackedScene" uid="uid://cqrb5682t73m2" path="res://src/Scenes/Game.tscn" id="1_cmrm7"]
-[ext_resource type="PackedScene" uid="uid://ci1x8kyywb0ap" path="res://src/Controls/HVolumeSlider.tscn" id="2_ulbr1"]
 
 [node name="Main" type="Node2D"]
 
@@ -10,6 +9,7 @@ offset_right = 1280.0
 offset_bottom = 720.0
 
 [node name="PixelPerfectViewport" type="SubViewport" parent="PixelPerfectContainer"]
+handle_input_locally = false
 canvas_item_default_texture_filter = 0
 physics_object_picking = true
 size = Vector2i(1280, 720)
@@ -18,12 +18,3 @@ size_2d_override_stretch = true
 render_target_update_mode = 4
 
 [node name="Game" parent="PixelPerfectContainer/PixelPerfectViewport" instance=ExtResource("1_cmrm7")]
-
-[node name="VolumeSlider" parent="." instance=ExtResource("2_ulbr1")]
-offset_left = 1212.0
-offset_top = 4.0
-offset_right = 1276.0
-offset_bottom = 20.0
-size_flags_horizontal = 8
-size_flags_vertical = 0
-Volume = 1.0

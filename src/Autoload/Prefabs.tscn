@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dia6p4v4y5hxl"]
+[gd_scene load_steps=3 format=3 uid="uid://dia6p4v4y5hxl"]
 
 [ext_resource type="Script" uid="uid://c772xqsqhdoqa" path="res://src/Autoload/Prefabs.cs" id="1_na7ta"]
+[ext_resource type="PackedScene" uid="uid://bdssvaj4laelm" path="res://src/Scenes/MemoryBlock.tscn" id="2_cmgij"]
 
 [node name="Prefabs" type="Node"]
 script = ExtResource("1_na7ta")
+MemoryBlock = ExtResource("2_cmgij")
