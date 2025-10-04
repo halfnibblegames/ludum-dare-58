@@ -10,8 +10,9 @@ public sealed record Program(Color Color, string Name);
 
 public interface ITaskManager {
   void AllocateProgram(string programName, int memoryNeeded);
+  void AddMemoryToProcess(Program program, int memoryAdded);
   void KillProcess(Program program);
-  IReadOnlyList<Program> GetPrograms();
+  IReadOnlyList<Program> Programs { get; }
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
@@ -29,9 +30,7 @@ public partial class TaskManager : Node2D, ITaskManager {
   private readonly List<Program> programs = [];
   private VBoxContainer programListContainer = null!;
 
-  public IReadOnlyList<Program> GetPrograms() {
-    return programs;
-  }
+  public IReadOnlyList<Program> Programs => programs;
 
   public void AllocateProgram(string programName, int memoryNeeded) {
     // Pick the first available color from the available pool.
@@ -45,12 +44,16 @@ public partial class TaskManager : Node2D, ITaskManager {
     programs.Add(program);
 
     // Attempt to allocate memory for the program. The game might end right here.s
-    Global.Services.Get<MemoryGrid>().AllocateProgram(program, memoryNeeded);
+    AddMemoryToProcess(program, memoryNeeded);
 
     // Add program to the UI.
     var programListEntry = Global.Prefabs.ProgramListEntry.Instantiate<ProgramListEntry>();
     programListEntry.SetProgram(program);
     programListContainer.AddChild(programListEntry);
+  }
+
+  public void AddMemoryToProcess(Program program, int memoryAdded) {
+    Global.Services.Get<MemoryGrid>().AllocateProgram(program, memoryAdded);
   }
 
   public void KillProcess(Program program) {

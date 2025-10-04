@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Godot;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Scenes;
@@ -30,32 +34,7 @@ public sealed partial class GameLoop : Node {
     garbageCollectTimer = null;
 
     var taskManager = Global.Services.Get<ITaskManager>();
-    for (var i = 0; i < 3; i++) {
-      var diceRoll = rng.Randf();
-      if (diceRoll < 0.4f) {
-        // Create a new program.
-        Animations.Animations.DoDelayed(
-          rng.RandfRange(0, simulationDuration),
-          () => taskManager.AllocateProgram("asd", rng.RandiRange(3, 8)));
-      }
-      else if (diceRoll < 0.65f) {
-        // Increase memory footprint of an existing program.
-      }
-      else if (diceRoll < 0.9f) {
-        // Close a program.
-        var programs = taskManager.GetPrograms();
-        if (programs.Count > 0) {
-          var programToClose = programs[rng.RandiRange(0, programs.Count - 1)];
-
-          Animations.Animations.DoDelayed(
-            rng.RandfRange(0, simulationDuration),
-            () => taskManager.KillProcess(programToClose));
-        }
-      }
-      // Do nothing
-
-      var a = 1;
-    }
+    planCycle(taskManager);
 
     Animations.Animations.DoDelayed(simulationDuration, startGarbageCollecting);
   }
@@ -64,4 +43,33 @@ public sealed partial class GameLoop : Node {
     var hue = rng.Randf();
     return Color.FromHsv(hue, 1, 1);
   }
+
+  private void planCycle(ITaskManager taskManager) {
+    var programs = new List<Program>(taskManager.Programs);
+    Random.Shared.Shuffle(CollectionsMarshal.AsSpan(programs));
+    var closeCount = rng.RandiRange(1, Math.Min(4, programs.Count - 1));
+    var openCount = rng.RandiRange(Math.Max(0, 3 - programs.Count), 5 - closeCount);
+    var modifyCount = rng.RandiRange(0, Math.Min(programs.Count - closeCount, 5 - openCount - closeCount));
+
+    var programsToClose = programs.Take(closeCount).ToList();
+    var programsToModify = programs.Skip(closeCount).Take(modifyCount).ToList();
+    var programsToOpen =
+      Enumerable.Range(0, openCount).Select(_ => new ProgramDescription("asd", rng.RandiRange(3, 8)));
+
+    foreach (var p in programsToClose) {
+      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => taskManager.KillProcess(p));
+    }
+
+    foreach (var p in programsToModify) {
+      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
+        () => taskManager.AddMemoryToProcess(p, rng.RandiRange(1, 3)));
+    }
+
+    foreach (var p in programsToOpen) {
+      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
+        () => taskManager.AllocateProgram(p.Name, p.MemoryFootprint));
+    }
+  }
+
+  private record ProgramDescription(string Name, int MemoryFootprint);
 }
