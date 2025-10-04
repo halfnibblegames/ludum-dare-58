@@ -60,31 +60,39 @@ public sealed partial class GameLoop : Node {
     Random.Shared.Shuffle(CollectionsMarshal.AsSpan(programs));
     var closeCount = rng.RandiRange(1, Math.Min(4, programs.Count - 1));
     var openCount = rng.RandiRange(Math.Max(0, 3 - programs.Count), 5 - closeCount);
-    var modifyCount = rng.RandiRange(0, Math.Min(programs.Count - closeCount, 5 - openCount - closeCount));
 
+    // Existing programs
     var programsToClose = programs.Take(closeCount).ToList();
-    var programsToModify = programs.Skip(closeCount).Take(modifyCount).ToList();
-    var programsToOpen =
-      selectRandomNames(taskManager, openCount).Select(name => new ProgramDescription(name, rng.RandiRange(3, 8)));
+    var programsToSimulate = programs.Skip(closeCount).ToList();
 
-    foreach (var p in programsToClose) {
-      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => taskManager.KillProcess(p));
+    // New programs
+    var programsToOpen = new List<Program>();
+    if (openCount > 0 && !programs.Any(p => p is Virus) && rng.Randf() < 0.1) {
+      openCount--;
+      programsToOpen.Add(new Virus(taskManager, taskManager.GetNextColor()));
     }
 
-    foreach (var p in programsToModify) {
-      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
-        () => taskManager.AddMemoryToProcess(p, rng.RandiRange(1, 3)));
+    programsToOpen.AddRange(
+      selectRandomNames(taskManager, openCount)
+        .Select(name => new Program(taskManager, name, taskManager.GetNextColor())));
+
+    foreach (var p in programsToClose) {
+      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.Kill());
+    }
+
+    foreach (var p in programsToSimulate) {
+      Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.SimulateCycle(rng));
     }
 
     foreach (var p in programsToOpen) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
-        () => taskManager.AllocateProgram(p.Name, p.MemoryFootprint));
+        () => taskManager.AllocateProgram(p, rng.RandiRange(3, 8)));
     }
   }
 
   private IList<string> selectRandomNames(ITaskManager taskManager, int count) {
     var existingNames = taskManager.Programs.Select(p => p.Name).ToHashSet();
-    var availableNames = TaskManager.AvailableProgramNames.Where(n => !existingNames.Contains(n)).ToList();
+    var availableNames = Program.PossibleNames.Where(n => !existingNames.Contains(n)).ToList();
     Random.Shared.Shuffle(CollectionsMarshal.AsSpan(availableNames));
 
     if (availableNames.Count >= count) {
@@ -93,6 +101,4 @@ public sealed partial class GameLoop : Node {
 
     return availableNames.Concat(Enumerable.Range(0, count - availableNames.Count).Select(i => $"Program{i}")).ToList();
   }
-
-  private record ProgramDescription(string Name, int MemoryFootprint);
 }

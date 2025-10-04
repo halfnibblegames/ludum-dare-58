@@ -1,5 +1,6 @@
 using Godot;
 using HalfNibbleGame.Autoload;
+using HalfNibbleGame.Nodes.Systems;
 using HalfNibbleGame.Scenes;
 
 namespace HalfNibbleGame.Nodes;
@@ -43,9 +44,10 @@ public partial class MemoryGrid : Node2D {
 
   public void AllocateProgram(Program program, int size) {
     var leftToAllocate = size;
-    for (var i = 0; i < blocks.Length; i++) {
-      if (!blocks[i].IsFree) continue;
-      blocks[i].AssignProgram(program);
+    foreach (var t in blocks)
+    {
+      if (!t.IsFree) continue;
+      t.AssignProgram(program);
       leftToAllocate--;
       if (leftToAllocate == 0) break;
     }

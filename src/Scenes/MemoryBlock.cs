@@ -26,16 +26,16 @@ public partial class MemoryBlock : Area2D {
   private void freeMemory() {
     if (assignedProgram is null) return;
 
-    var program = assignedProgram;
     setColor(freeColor);
+    assignedProgram.OnMemoryFreed(this);
     assignedProgram = null;
-    Global.Services.Get<ITaskManager>().OnMemoryFreed(program, this);
   }
 
   public void AssignProgram(Program program) {
     if (assignedProgram is not null) throw new InvalidOperationException();
 
     assignedProgram = program;
+    program.OnMemoryAllocated(this);
     setColor(program.Color);
   }
 

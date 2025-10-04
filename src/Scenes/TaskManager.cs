@@ -7,14 +7,13 @@ using HalfNibbleGame.Nodes.Systems;
 
 namespace HalfNibbleGame.Scenes;
 
-public sealed record Program(Color Color, string Name);
-
 public interface ITaskManager {
   IReadOnlyList<Program> Programs { get; }
-  void AllocateProgram(string programName, int memoryNeeded);
+  Color GetNextColor();
+  void AllocateProgram(Program program, int memoryNeeded);
   void AddMemoryToProcess(Program program, int memoryAdded);
   void KillProcess(Program program);
-  void OnMemoryFreed(Program program, MemoryBlock memoryBlock);
+  void CrashProcess(Program program);
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
@@ -37,35 +36,19 @@ public partial class TaskManager : Node2D, ITaskManager {
     Colors.Pink
   ];
 
-  public static readonly List<string> AvailableProgramNames = [
-    "PhotoStore",
-    "Goggle Ride",
-    "Goggle Vroom",
-    "Disharmony",
-    "EarthMammal",
-    "Gopoint",
-    "Paint4D",
-    "Watervapor",
-    "Manufacturio",
-    "Underwatch",
-    "Recycling bin",
-    "VisageTome Messenger",
-    "Cosmic Critter Chess"
-  ];
-
   private readonly List<Program> programs = [];
   private VBoxContainer programListContainer = null!;
 
   public IReadOnlyList<Program> Programs => programs;
 
-  public void AllocateProgram(string programName, int memoryNeeded) {
+  public Color GetNextColor() {
     // Pick the first available color from the available pool.
     var color = availableProgramColors.First();
     availableProgramColors.RemoveAt(0);
+    return color;
+  }
 
-    // Crate the program using the selected color.
-    var program = new Program(color, programName);
-
+  public void AllocateProgram(Program program, int memoryNeeded) {
     // Add program to the internal list.
     programs.Add(program);
 
@@ -95,13 +78,9 @@ public partial class TaskManager : Node2D, ITaskManager {
     programListContainer.RemoveChild(childToRemove);
   }
 
-  public void OnMemoryFreed(Program program, MemoryBlock memoryBlock) {
-    if (programs.Contains(program)) {
-      // Uh oh
-      memoryBlock.Corrupt();
-      KillProcess(program);
-      Global.Services.Get<GameLoop>().InterruptGarbageCollecting();
-    }
+  public void CrashProcess(Program program) {
+    KillProcess(program);
+    Global.Services.Get<GameLoop>().InterruptGarbageCollecting();
   }
 
   public override void _Ready() {
