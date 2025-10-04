@@ -14,6 +14,6 @@ public partial class MemoryBlock : Area2D {
   }
 
   private void freeMemory() {
-    GetNode<ColorRect>("ColorRect").Color = new Color(255, 0, 0);
+	GetNode<ColorRect>("ColorRect").Color = new Color(255, 0, 0);
   }
 }

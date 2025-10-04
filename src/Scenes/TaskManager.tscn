@@ -1,0 +1,31 @@
+[gd_scene load_steps=3 format=3 uid="uid://cuiw8v0h58o2x"]
+
+[ext_resource type="Script" uid="uid://qr8qguwtd0aa" path="res://src/Scenes/TaskManager.cs" id="1_f410c"]
+[ext_resource type="Texture2D" uid="uid://co2iyhl75cf51" path="res://assets/task_manager.png" id="1_ujhne"]
+
+[node name="TaskManager" type="Node2D"]
+script = ExtResource("1_f410c")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(50, 75)
+texture = ExtResource("1_ujhne")
+metadata/_aseprite_wizard_interface_config_ = {
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "res://assets/task_manager.aseprite",
+"source_uid": 8053217209127029424
+}
+}

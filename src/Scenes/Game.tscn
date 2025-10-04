@@ -1,8 +1,22 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqrb5682t73m2"]
+[gd_scene load_steps=5 format=3 uid="uid://cqrb5682t73m2"]
 
+[ext_resource type="Texture2D" uid="uid://d23snmwthqpdf" path="res://assets/wallpaper.png" id="1_i36l2"]
+[ext_resource type="Texture2D" uid="uid://88mwqghf20cc" path="res://assets/taskbar.png" id="2_mm2k5"]
+[ext_resource type="PackedScene" uid="uid://cuiw8v0h58o2x" path="res://src/Scenes/TaskManager.tscn" id="3_6wgcs"]
 [ext_resource type="PackedScene" uid="uid://bdssvaj4laelm" path="res://src/Scenes/MemoryBlock.tscn" id="3_mm2k5"]
 
 [node name="Game" type="Node2D"]
+
+[node name="Wallpaper" type="Sprite2D" parent="."]
+position = Vector2(160, 90)
+texture = ExtResource("1_i36l2")
+
+[node name="Taskbar" type="Sprite2D" parent="."]
+position = Vector2(160, 90)
+texture = ExtResource("2_mm2k5")
+
+[node name="TaskManager" parent="." instance=ExtResource("3_6wgcs")]
+position = Vector2(17, 12)
 
 [node name="Extent" type="Marker2D" parent="."]
 position = Vector2(320, 180)
