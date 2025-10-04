@@ -1,11 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://cqrb5682t73m2"]
+[gd_scene load_steps=7 format=3 uid="uid://cqrb5682t73m2"]
 
+[ext_resource type="Script" uid="uid://cqj4dlnwtlshm" path="res://src/Nodes/Systems/GameLoop.cs" id="1_bg83v"]
+[ext_resource type="PackedScene" uid="uid://kpvcj41byjv6" path="res://src/Animations/AnimationRunner.tscn" id="1_f61ph"]
 [ext_resource type="Texture2D" uid="uid://d23snmwthqpdf" path="res://assets/wallpaper.png" id="1_i36l2"]
 [ext_resource type="Texture2D" uid="uid://88mwqghf20cc" path="res://assets/taskbar.png" id="2_mm2k5"]
 [ext_resource type="PackedScene" uid="uid://cuiw8v0h58o2x" path="res://src/Scenes/TaskManager.tscn" id="3_6wgcs"]
 [ext_resource type="Script" uid="uid://cl1a1im5yk7fm" path="res://src/Nodes/MemoryGrid.cs" id="4_6wgcs"]
 
 [node name="Game" type="Node2D"]
+
+[node name="AnimationRunner" parent="." instance=ExtResource("1_f61ph")]
+
+[node name="GameLoop" type="Node" parent="."]
+script = ExtResource("1_bg83v")
 
 [node name="Wallpaper" type="Sprite2D" parent="."]
 position = Vector2(160, 90)

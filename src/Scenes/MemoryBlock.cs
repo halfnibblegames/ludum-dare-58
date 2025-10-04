@@ -1,11 +1,13 @@
 using System;
 using Godot;
+using HalfNibbleGame.Autoload;
+using HalfNibbleGame.Nodes.Systems;
 
 namespace HalfNibbleGame.Scenes;
 
 public partial class MemoryBlock : Area2D {
 
-  [Export] private Color freeColor = new(128, 128, 128);
+  [Export] private Color freeColor = new(0.5f, 0.5f, 0.5f);
 
   private IProgram? assignedProgram;
 
@@ -18,7 +20,8 @@ public partial class MemoryBlock : Area2D {
   public override void _Input(InputEvent @event) {
     // 😭
     if (@event is InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left } mouseEvent) {
-      if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().HasPoint(mouseEvent.Position - GlobalPosition)) {
+      if (GetNode<CollisionShape2D>("MouseCollision").Shape.GetRect().HasPoint(mouseEvent.Position - GlobalPosition) &&
+          Global.Services.Get<GameLoop>().IsGarbageCollecting) {
         freeMemory();
       }
     }
@@ -29,6 +32,7 @@ public partial class MemoryBlock : Area2D {
 
     assignedProgram.MemoryFreed();
 	  setColor(freeColor);
+    assignedProgram = null;
   }
 
   public void AssignProgram(IProgram program) {

@@ -14,6 +14,7 @@ public partial class MemoryGrid : Node2D {
   private MemoryBlock[] blocks = [];
 
   public override void _Ready() {
+    Global.Services.ProvideInScene(this);
     blocks = new MemoryBlock[width * height];
     for (var y = 0; y < width; y++) {
       for (var x = 0; x < height; x++) {
