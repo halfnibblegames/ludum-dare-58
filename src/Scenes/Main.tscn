@@ -12,11 +12,13 @@ offset_bottom = 720.0
 [node name="PixelPerfectViewport" type="SubViewport" parent="PixelPerfectContainer"]
 handle_input_locally = false
 canvas_item_default_texture_filter = 0
+physics_object_picking = true
 size = Vector2i(1280, 720)
+size_2d_override = Vector2i(320, 180)
+size_2d_override_stretch = true
 render_target_update_mode = 4
 
 [node name="Game" parent="PixelPerfectContainer/PixelPerfectViewport" instance=ExtResource("1_cmrm7")]
-scale = Vector2(4, 4)
 
 [node name="VolumeSlider" parent="." instance=ExtResource("2_ulbr1")]
 offset_left = 1212.0

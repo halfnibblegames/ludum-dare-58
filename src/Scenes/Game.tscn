@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqrb5682t73m2"]
+[gd_scene load_steps=2 format=3 uid="uid://cqrb5682t73m2"]
 
-[ext_resource type="Texture2D" uid="uid://xe0xdqucvs83" path="res://assets/fullscreen_placeholder.png" id="1_gb23r"]
-[ext_resource type="PackedScene" uid="uid://dnu2oyugc5pvh" path="res://src/Scenes/ControlPrompt.tscn" id="2_i36l2"]
+[ext_resource type="PackedScene" uid="uid://bdssvaj4laelm" path="res://src/Scenes/MemoryBlock.tscn" id="3_mm2k5"]
 
 [node name="Game" type="Node2D"]
 
@@ -9,14 +8,8 @@
 position = Vector2(320, 180)
 gizmo_extents = 4.0
 
-[node name="FullscreenPlaceholder" type="Sprite2D" parent="."]
-position = Vector2(160, 90)
-scale = Vector2(1.66667, 1.66667)
-texture = ExtResource("1_gb23r")
+[node name="MemoryBlock" parent="." instance=ExtResource("3_mm2k5")]
+position = Vector2(42, 62)
 
-[node name="ControllerPrompt" parent="." instance=ExtResource("2_i36l2")]
-offset_left = 6.0
-offset_top = 7.0
-offset_right = 22.0
-offset_bottom = 23.0
-ShownInput = 1
+[node name="MemoryBlock2" parent="." instance=ExtResource("3_mm2k5")]
+position = Vector2(6, 6)
