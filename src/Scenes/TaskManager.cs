@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Nodes;
@@ -14,8 +15,6 @@ public interface ITaskManager {
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
-  private static readonly RandomNumberGenerator rng = new();
-
   private static readonly List<Color> availableProgramColors = [
     Color.FromString("#FFADAD", Colors.Red),
     Color.FromString("#FFD6A5", Colors.Orange),
@@ -28,17 +27,16 @@ public partial class TaskManager : Node2D, ITaskManager {
   ];
 
   private readonly List<Program> programs = [];
-  private VBoxContainer programListContainer;
+  private VBoxContainer programListContainer = null!;
 
   public IReadOnlyList<Program> GetPrograms() {
     return programs;
   }
 
   public void AllocateProgram(string programName, int memoryNeeded) {
-    // Pick a random color and remove it from the available pool.
-    var colorIndex = rng.RandiRange(0, availableProgramColors.Count - 1);
-    var color = availableProgramColors[colorIndex];
-    availableProgramColors.RemoveAt(colorIndex);
+    // Pick the first available color from the available pool.
+    var color = availableProgramColors.First();
+    availableProgramColors.RemoveAt(0);
 
     // Crate the program using the selected color.
     var program = new Program(color, programName);
@@ -60,7 +58,7 @@ public partial class TaskManager : Node2D, ITaskManager {
     var index = programs.IndexOf(program);
     programs.RemoveAt(index);
 
-    // Add the program's color back to the list of available colors.
+    // Add the program's color back to the list of available colors. Putting it at the end prevents reuse and confusion.
     availableProgramColors.Add(program.Color);
 
     // Remove from the UI.
