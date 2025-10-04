@@ -31,7 +31,13 @@ public partial class TaskManager : Node2D, ITaskManager {
   }
 
   public void KillProcess(Program program) {
-    programs.Remove(program);
+    // Remove from internal list.
+    var index = programs.IndexOf(program);
+    programs.RemoveAt(index);
+
+    // Remove from the UI.
+    var childToRemove = programListContainer.GetChildren()[index];
+    programListContainer.RemoveChild(childToRemove);
   }
 
   public IReadOnlyList<Program> GetPrograms() {

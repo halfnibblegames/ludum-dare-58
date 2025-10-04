@@ -30,11 +30,33 @@ public sealed partial class GameLoop : Node {
     garbageCollectTimer = null;
 
     var taskManager = Global.Services.Get<ITaskManager>();
-    for (var i = 0; i < 3; i++)
-      Animations.Animations.DoDelayed(
+    for (var i = 0; i < 3; i++) {
+      var diceRoll = rng.Randf();
+      if (diceRoll < 0.4f) {
+        // Create a new program.
+        Animations.Animations.DoDelayed(
           rng.RandfRange(0, simulationDuration),
-          () => taskManager.AllocateProgram(new Program(randomColor(), "asd"), rng.RandiRange(3, 8)))
-        ;
+          () => taskManager.AllocateProgram(new Program(randomColor(), "asd"), rng.RandiRange(3, 8)));
+      }
+      else if (diceRoll < 0.65f) {
+        // Increase memory footprint of an existing program.
+      }
+      else if (diceRoll < 0.9f) {
+        // Close a program.
+        var programs = taskManager.GetPrograms();
+        if (programs.Count > 0) {
+          var programToClose = programs[rng.RandiRange(0, programs.Count - 1)];
+
+          Animations.Animations.DoDelayed(
+            rng.RandfRange(0, simulationDuration),
+            () => taskManager.KillProcess(programToClose));
+        }
+      }
+      // Do nothing
+
+      var a = 1;
+    }
+
     Animations.Animations.DoDelayed(simulationDuration, startGarbageCollecting);
   }
 
