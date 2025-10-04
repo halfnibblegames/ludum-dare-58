@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cb8fj3s24t010"
+path="res://.godot/imported/taskbar.aseprite-3ba1af6d5709760fe6a3508a26c53502.res"
+
+[deps]
+
+source_file="res://assets/taskbar.aseprite"
+dest_files=["res://.godot/imported/taskbar.aseprite-3ba1af6d5709760fe6a3508a26c53502.res"]
+
+[params]
+
