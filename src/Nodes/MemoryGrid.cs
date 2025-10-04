@@ -13,17 +13,29 @@ public partial class MemoryGrid : Node2D {
 
   private MemoryBlock[] blocks = [];
 
-  // Instantiate memory blocks
-
   public override void _Ready() {
     blocks = new MemoryBlock[width * height];
-    for (var x = 0; x < width; x++) {
-      for (var y = 0; y < height; y++) {
+    for (var y = 0; y < width; y++) {
+      for (var x = 0; x < height; x++) {
         var node = Global.Prefabs.MemoryBlock.Instantiate<MemoryBlock>();
         node.Position = new Vector2((x + 0.5f) * (blockSize + blockMargin),  (y + 0.5f) * (blockSize + blockMargin));
         this[x, y] = node;
         AddChild(node);
       }
+    }
+  }
+
+  public void AllocateProgram(IProgram program, int size) {
+    var leftToAllocate = size;
+    for (var i = 0; i < blocks.Length; i++) {
+      if (!blocks[i].IsFree) continue;
+      blocks[i].AssignProgram(program);
+      leftToAllocate--;
+      if (leftToAllocate == 0) break;
+    }
+
+    if (leftToAllocate > 0) {
+      GD.Print("game over");
     }
   }
 
