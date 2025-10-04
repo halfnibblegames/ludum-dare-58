@@ -36,7 +36,7 @@ public sealed partial class GameLoop : Node {
         // Create a new program.
         Animations.Animations.DoDelayed(
           rng.RandfRange(0, simulationDuration),
-          () => taskManager.AllocateProgram(new Program(randomColor(), "asd"), rng.RandiRange(3, 8)));
+          () => taskManager.AllocateProgram("asd", rng.RandiRange(3, 8)));
       }
       else if (diceRoll < 0.65f) {
         // Increase memory footprint of an existing program.
