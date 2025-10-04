@@ -9,10 +9,10 @@ namespace HalfNibbleGame.Scenes;
 public sealed record Program(Color Color, string Name);
 
 public interface ITaskManager {
+  IReadOnlyList<Program> Programs { get; }
   void AllocateProgram(string programName, int memoryNeeded);
   void AddMemoryToProcess(Program program, int memoryAdded);
   void KillProcess(Program program);
-  IReadOnlyList<Program> Programs { get; }
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
@@ -24,7 +24,15 @@ public partial class TaskManager : Node2D, ITaskManager {
     Color.FromString("#9BF6FF", Colors.Cyan),
     Color.FromString("#A0C4FF", Colors.Blue),
     Color.FromString("#BDB2FF", Colors.Purple),
-    Color.FromString("#FFC6FF", Colors.Pink)
+    Color.FromString("#FFC6FF", Colors.Pink),
+    Colors.Red,
+    Colors.Orange,
+    Colors.Yellow,
+    Colors.Green,
+    Colors.Cyan,
+    Colors.Blue,
+    Colors.Purple,
+    Colors.Pink
   ];
 
   private readonly List<Program> programs = [];
@@ -43,7 +51,7 @@ public partial class TaskManager : Node2D, ITaskManager {
     // Add program to the internal list.
     programs.Add(program);
 
-    // Attempt to allocate memory for the program. The game might end right here.s
+    // Attempt to allocate memory for the program. The game might end right here.
     AddMemoryToProcess(program, memoryNeeded);
 
     // Add program to the UI.
