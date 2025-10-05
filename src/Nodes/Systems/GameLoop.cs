@@ -125,7 +125,7 @@ public sealed partial class GameLoop : Node {
     var programsToClose = existingPrograms.Take(closingCount).ToList();
     var programsToSimulate = existingPrograms.Skip(closingCount).ToList();
 
-    foreach (var p in programsToClose) {
+    foreach (var p in programsToClose.Where(p => p is not Virus)) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.Kill());
     }
     foreach (var p in programsToSimulate) {
