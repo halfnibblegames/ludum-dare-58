@@ -8,6 +8,7 @@ namespace HalfNibbleGame.Scenes;
 public partial class UiManager : Control {
   [Export] private Label? scoreLabel;
   [Export] private Label? scoreNoticeLabel;
+  [Export] private Button? defragButton;
 
   private int lastKnownScore;
   private double nextScoreUpdate;
@@ -30,5 +31,15 @@ public partial class UiManager : Control {
     if (scoreNoticeLabel is not null) {
       scoreNoticeLabel.Text = tracker.ScoreNotice;
     }
+
+    if (defragButton is not null) {
+      var gameLoop = Global.Services.Get<GameLoop>();
+      defragButton.Disabled = !gameLoop.CanDefrag;
+      defragButton.Text = $"{gameLoop.DefragsAvailable} available";
+    }
+  }
+
+  public void OnDefragButtonClicked() {
+    Global.Services.Get<GameLoop>().Defrag();
   }
 }

@@ -19,8 +19,8 @@ public partial class MemoryBlock : Area2D {
 
   private MemoryGrid? grid;
   private (int X, int Y) coordinates;
-  private bool isCorrupted;
-  public bool IsFree => AssignedProgram is null && !isCorrupted;
+  public bool IsCorrupted { get; private set; }
+  public bool IsFree => AssignedProgram is null && !IsCorrupted;
 
   public override void _Ready() {
     setColor(freeColor);
@@ -45,7 +45,7 @@ public partial class MemoryBlock : Area2D {
     updateColor();
 
     var canBeClicked = Global.Services.Get<GameLoop>().IsGarbageCollecting;
-    var shouldLightUp = canBeClicked && !isCorrupted;
+    var shouldLightUp = canBeClicked && !IsCorrupted;
     if (background is not null) {
       if (!shouldLightUp) {
         background.Frame = 0;
@@ -63,12 +63,12 @@ public partial class MemoryBlock : Area2D {
   }
 
   private void updateColor() {
-    if (isCorrupted) {
+    if (IsCorrupted) {
       setColor(corruptedColor);
       return;
     }
 
-    var color = isCorrupted ? corruptedColor : AssignedProgram?.Color ?? freeColor;
+    var color = IsCorrupted ? corruptedColor : AssignedProgram?.Color ?? freeColor;
     if (Global.Instance.DimFreeMemory && AssignedProgram is { IsDead: true }) {
       color = new Color(color.R, color.G, color.B, 0.5f);
     }
@@ -89,21 +89,25 @@ public partial class MemoryBlock : Area2D {
   }
 
   public void FreeMemory() {
-    setColor(freeColor);
     AssignedProgram!.OnMemoryFreed(this);
+    Reset();
+  }
+
+  public void Reset() {
+    setColor(freeColor);
     AssignedProgram = null;
   }
 
-  public void AssignProgram(Program program) {
+  public void AssignProgram(Program program, bool suppressProgramNotification = false) {
     if (AssignedProgram is not null) throw new InvalidOperationException();
 
     AssignedProgram = program;
-    program.OnMemoryAllocated(this);
+    if (!suppressProgramNotification) program.OnMemoryAllocated(this);
     setColor(program.Color);
   }
 
   public void Corrupt() {
-    isCorrupted = true;
+    IsCorrupted = true;
     setColor(new Color(0, 0, 0));
   }
 

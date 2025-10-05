@@ -27,6 +27,12 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
 
   public float MemoryUsage { get; private set; }
 
+  public IReadOnlyList<Program> ProgramsInMemory => blocks
+    .Where(b => b.AssignedProgram is not null)
+    .Select(b => b.AssignedProgram!)
+    .Distinct()
+    .ToList();
+
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
     blocks = new MemoryBlock[Width * Height];
@@ -115,16 +121,27 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
     if (idx % Width > 0) yield return idx - 1;
   }
 
-  public void AllocateProgram(Program program, int size) {
+  public IEnumerable<MemoryBlock> AllocateProgram(Program program, int size, bool suppressProgramNotification = false) {
     var leftToAllocate = size;
     foreach (var t in blocks) {
       if (!t.IsFree) continue;
-      t.AssignProgram(program);
+      t.AssignProgram(program, suppressProgramNotification);
       leftToAllocate--;
+      yield return t;
       if (leftToAllocate == 0) break;
     }
 
+    // TODO: set a game over flag somewhere. Then in GameLoop._Process do the actual game over checking.
+    //       Why? Because we're potentially deep down a method call stack and we might be interrupting an atomic op
     if (leftToAllocate > 0) GD.Print("game over");
+  }
+
+  public void ResetAll() {
+    foreach (var b in blocks) {
+      if (!b.IsCorrupted) {
+        b.Reset();
+      }
+    }
   }
 
   public IEnumerator<MemoryBlock> GetEnumerator() {

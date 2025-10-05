@@ -15,6 +15,7 @@ public sealed partial class GameLoop : Node {
   [Export] public float GarbageCollectionDuration = 4f;
   private SceneTreeTimer? garbageCollectTimer;
   [Export] private float simulationDuration = 4f;
+  public const int CyclesPerDefrag = 3;
 
   [Export] private Graph? memoryGraph;
 
@@ -24,6 +25,8 @@ public sealed partial class GameLoop : Node {
 
   public bool IsGarbageCollecting { get; private set; }
   public double GarbageCollectingTimeLeft => garbageCollectTimer?.TimeLeft ?? 0;
+  public bool CanDefrag => IsGarbageCollecting && DefragsAvailable > 0;
+  public int DefragsAvailable { get; private set; }
 
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
@@ -58,6 +61,7 @@ public sealed partial class GameLoop : Node {
         activeTutorial = TutorialPhase.Corruption;
         break;
       case TutorialPhase.Corruption:
+      case TutorialPhase.Defrag:
         // Tutorial is over
         tutorial.Hide();
         startGarbageCollecting();
@@ -134,6 +138,17 @@ public sealed partial class GameLoop : Node {
   }
 
   private void finishComputerSimulation() {
+    if (cycleNumber % CyclesPerDefrag == 0) {
+      DefragsAvailable++;
+
+      // First defrag? Show tutorial
+      if (cycleNumber / CyclesPerDefrag == 1) {
+        Global.Services.Get<Tutorial>().ShowDefragExplanation();
+        activeTutorial = TutorialPhase.Defrag;
+        return;
+      }
+    }
+
     if (cycleNumber != 1) { // No more tutorial needed
       startGarbageCollecting();
       return;
@@ -225,10 +240,24 @@ public sealed partial class GameLoop : Node {
     return availableNames.Concat(Enumerable.Range(0, count - availableNames.Count).Select(i => $"Program{i}")).ToList();
   }
 
+  public void Defrag() {
+    if (!CanDefrag) {
+      GD.PushError("Defrag: can't defrag");
+      return;
+    }
+
+    Global.Services.Get<ITaskManager>().Defrag();
+    DefragsAvailable--;
+
+    // Immediately stop garbage collection
+    startComputerSimulation();
+  }
+
   enum TutorialPhase {
     None,
     List,
     Memory,
-    Corruption
+    Corruption,
+    Defrag
   }
 }

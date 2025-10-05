@@ -16,6 +16,7 @@ public interface ITaskManager {
   void AddMemoryToProcess(Program program, int memoryAdded);
   void KillProcess(Program program);
   void CrashProcess(Program program);
+  void Defrag();
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
@@ -69,7 +70,7 @@ public partial class TaskManager : Node2D, ITaskManager {
   }
 
   public void AddMemoryToProcess(Program program, int memoryAdded) {
-    memoryGrid.AllocateProgram(program, memoryAdded);
+    _ = memoryGrid.AllocateProgram(program, memoryAdded).ToList();
   }
 
   public void KillProcess(Program program) {
@@ -96,5 +97,17 @@ public partial class TaskManager : Node2D, ITaskManager {
     base._Ready();
     Global.Services.ProvidePersistent<ITaskManager>(this);
     programListContainer = GetNode<VBoxContainer>("../../../../ProgramList");
+  }
+
+  public void Defrag() {
+    var programsInMemory = memoryGrid.ProgramsInMemory;
+    var memoryUsagePerProgram = programsInMemory.Select(p => (p, p.MemoryUsage)).ToDictionary();
+
+    memoryGrid.ResetAll();
+    foreach (var program in programsInMemory) {
+      var memoryUsage = memoryUsagePerProgram[program];
+      var newMemory = memoryGrid.AllocateProgram(program, memoryUsage, true).ToList();
+      program.ReplaceMemory(newMemory);
+    }
   }
 }

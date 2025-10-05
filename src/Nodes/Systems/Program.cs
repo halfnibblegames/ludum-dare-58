@@ -17,10 +17,22 @@ public class Program(ITaskManager taskManager, string name, Color color) {
 
   public string Name => name;
   public Color Color => color;
+  public int MemoryUsage => AllocatedMemory.Count;
 
   public virtual void SimulateCycle(RandomNumberGenerator rng) {
     if (rng.Randf() < 0.75) {
       taskManager.AddMemoryToProcess(this, rng.RandiRange(1, 3));
+    }
+  }
+
+  public void ReplaceMemory(ICollection<MemoryBlock> newMemory) {
+    if (newMemory.Count != AllocatedMemory.Count) {
+      GD.PushError("Different memory usage");
+    }
+    AllocatedMemory.Clear();
+    foreach (var block in newMemory)
+    {
+      AllocatedMemory.Add(block);
     }
   }
 

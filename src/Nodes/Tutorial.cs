@@ -1,5 +1,6 @@
 using Godot;
 using HalfNibbleGame.Autoload;
+using HalfNibbleGame.Nodes.Systems;
 using HalfNibbleGame.Scenes;
 
 namespace HalfNibbleGame.Nodes;
@@ -79,6 +80,19 @@ public partial class Tutorial : Control {
     Show();
   }
 
+  public void ShowDefragExplanation() {
+    var def = GetNode<Control>("DefragReference");
+    reference.Position = def.Position;
+    reference.Size = def.Size;
+    text.Text = explanationDefrag;
+    updatePositions();
+
+    controllerPrompt.Hide();
+    timeUntilHint = 5;
+
+    Show();
+  }
+
   private void updatePositions() {
     var l = reference.Position.X;
     var r = reference.Position.X + reference.Size.X;
@@ -113,4 +127,7 @@ public partial class Tutorial : Control {
 
   private static readonly string explanationCorruption =
     "Freeing memory that's in use causes that block to corrupt and the cycle to end. Viruses should always be freed, even while they are running.";
+
+  private static readonly string explanationDefrag =
+    $"Every {GameLoop.CyclesPerDefrag} cycles, you get access to a defragmentation. This groups all memory of the same programs together, but immediately ends the cycle.";
 }
