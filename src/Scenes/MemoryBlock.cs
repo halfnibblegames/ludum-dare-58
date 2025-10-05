@@ -11,6 +11,8 @@ public partial class MemoryBlock : Area2D {
 
   [Export] private Color freeColor = new(0.5f, 0.5f, 0.5f);
   [Export] private Color corruptedColor = new(0.2f, 0.2f, 0.2f);
+  [Export] private AnimatedSprite2D? background;
+  [Export] private ColorRect? colorRect;
   [Export] private Sprite2D? lightSprite;
 
   private bool isCorrupted;
@@ -21,24 +23,25 @@ public partial class MemoryBlock : Area2D {
   }
 
   public override void _Process(double delta) {
-    var canBeClicked = Global.Services.Get<GameLoop>().IsGarbageCollecting;
-    updateColor(canBeClicked);
+    updateColor();
 
+    var canBeClicked = Global.Services.Get<GameLoop>().IsGarbageCollecting;
+    var shouldLightUp = canBeClicked && !isCorrupted;
+    if (background is not null) {
+      background.Frame = shouldLightUp ? 1 : 0;
+    }
     if (lightSprite is not null) {
-      lightSprite.Visible = canBeClicked && !isCorrupted;
+      lightSprite.Visible = shouldLightUp;
     }
   }
 
-  private void updateColor(bool canBeClicked) {
+  private void updateColor() {
     if (isCorrupted) {
       setColor(corruptedColor);
       return;
     }
 
     var color = isCorrupted ? corruptedColor : AssignedProgram?.Color ?? freeColor;
-    if (!canBeClicked) {
-      color = Color.FromHsv(color.H, color.S, color.V * 0.75f);
-    }
     if (Global.Instance.DimFreeMemory && AssignedProgram is { IsDead: true }) {
       color = new Color(color.R, color.G, color.B, 0.5f);
     }
@@ -78,12 +81,11 @@ public partial class MemoryBlock : Area2D {
   }
 
   private void setColor(Color c) {
-    setColor(_ => c);
-  }
-
-  private void setColor(Func<Color, Color> f) {
-    var rect = GetNode<ColorRect>("ColorRect");
-    var color = f(rect.Color);
-    rect.Color = color;
+    if (background is not null) {
+      background.Modulate = c;
+    }
+    if (colorRect is not null) {
+      colorRect.Color = c;
+    }
   }
 }

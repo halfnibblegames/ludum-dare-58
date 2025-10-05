@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://4l0d27xj2tpg"
+path="res://.godot/imported/glow.aseprite-5ab55afca51c058ad491169ec51c1523.res"
+
+[deps]
+
+source_file="res://assets/glow.aseprite"
+dest_files=["res://.godot/imported/glow.aseprite-5ab55afca51c058ad491169ec51c1523.res"]
+
+[params]
+

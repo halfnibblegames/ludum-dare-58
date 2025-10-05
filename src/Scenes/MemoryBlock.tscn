@@ -1,23 +1,77 @@
-[gd_scene load_steps=5 format=3 uid="uid://bdssvaj4laelm"]
+[gd_scene load_steps=9 format=4 uid="uid://bdssvaj4laelm"]
 
 [ext_resource type="Script" uid="uid://dnadjay5qmtql" path="res://src/Scenes/MemoryBlock.cs" id="1_otyng"]
 [ext_resource type="Texture2D" uid="uid://bg2akpct6a63y" path="res://assets/block.png" id="2_6tqwb"]
 [ext_resource type="Texture2D" uid="uid://cu6hpvvph370s" path="res://assets/light.png" id="3_px4uc"]
 
+[sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_px4uc"]
+_data = PackedByteArray("AAADAAUAAAABAAAAJAAAABEAAACWAAAAUklGRo4AAABXRUJQVlA4TIIAAAAvIwAEACegoG0bhj+ngvobFUVt20D8ORXUvX0VtW0D8edUUPf2nf8AcBuStvl/YNC2jaAdg+8YrMfg9gz++JOaVFWPIKL/Cty2UTI+hl9cId0ku5W9Y2R/Km4miqcVTABFxSZWPOBRJCICpZgYEyQx8hdOszPNeQfnrZz3dN7c+JcL")
+size_override = Vector2(36, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rses4"]
+atlas = SubResource("PortableCompressedTexture2D_px4uc")
+region = Rect2(0, 0, 18, 17)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e6ta3"]
+atlas = SubResource("PortableCompressedTexture2D_px4uc")
+region = Rect2(18, 0, 18, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u8fum"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rses4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e6ta3")
+}],
+"loop": false,
+"name": &"default",
+"speed": 10.0
+}]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6tqwb"]
 size = Vector2(18, 17)
 
-[node name="MemoryBlock" type="Area2D" node_paths=PackedStringArray("lightSprite")]
+[node name="MemoryBlock" type="Area2D" node_paths=PackedStringArray("background", "colorRect", "lightSprite")]
 script = ExtResource("1_otyng")
+background = NodePath("Background")
+colorRect = NodePath("ColorRect")
 lightSprite = NodePath("Light")
 
+[node name="Background" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_u8fum")
+metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
+"pending_changes": {}
+}
+metadata/_aseprite_wizard_config_ = {
+"embed_tex": true,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"scale": "1.0",
+"should_round_fps": true,
+"slice": "",
+"source": "res://assets/glow.aseprite",
+"source_uid": 2059709371620793624
+}
+metadata/_aseprite_wizard_source_file_hash_ = "b3d27bdfca0df4744f2f4418fa18090e"
+
 [node name="ColorRect" type="ColorRect" parent="."]
+visible = false
 offset_left = -9.0
 offset_top = -8.0
 offset_right = 9.0
 offset_bottom = 8.0
 
 [node name="MouseCollision" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("RectangleShape2D_6tqwb")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
