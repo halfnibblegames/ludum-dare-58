@@ -47,7 +47,15 @@ public partial class MemoryBlock : Area2D {
     var canBeClicked = Global.Services.Get<GameLoop>().IsGarbageCollecting;
     var shouldLightUp = canBeClicked && !isCorrupted;
     if (background is not null) {
-      background.Frame = shouldLightUp ? 1 : 0;
+      if (!shouldLightUp) {
+        background.Frame = 0;
+      }
+      else if (AssignedProgram is Virus) {
+        background.Frame = 2;
+      }
+      else {
+        background.Frame = 1;
+      }
     }
     if (lightSprite is not null) {
       lightSprite.Visible = shouldLightUp;

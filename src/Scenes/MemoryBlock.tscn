@@ -1,12 +1,12 @@
-[gd_scene load_steps=9 format=4 uid="uid://bdssvaj4laelm"]
+[gd_scene load_steps=10 format=4 uid="uid://bdssvaj4laelm"]
 
 [ext_resource type="Script" uid="uid://dnadjay5qmtql" path="res://src/Scenes/MemoryBlock.cs" id="1_otyng"]
 [ext_resource type="Texture2D" uid="uid://bg2akpct6a63y" path="res://assets/block.png" id="2_6tqwb"]
 [ext_resource type="Texture2D" uid="uid://cu6hpvvph370s" path="res://assets/light.png" id="3_px4uc"]
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_px4uc"]
-_data = PackedByteArray("AAADAAUAAAABAAAAJAAAABEAAACSAAAAUklGRooAAABXRUJQVlA4TH0AAAAvIwAEACegIG0Dxr/Y7ppRkLYB419sdw0oSNuA8S+2uwbmPyQFbGPbf2DQto2gHYPvGKzH4PYM/viTmlRVjyCi/wrctlEyPoZfXCHdJLuVvWNkfypuJoqnFUwARcUmVjzgUSQiAqWYGBMkMfIXTrMzzXkH562c93Te3PiXCwA=")
-size_override = Vector2(36, 17)
+_data = PackedByteArray("AAADAAUAAAABAAAAJAAAACIAAADkAAAAUklGRtwAAABXRUJQVlA4TM8AAAAvI0AIEE+gqG0jNtZ/by+Up7ZtGzbm3entyqht24aNeXd6uzLzHwD8/7uTmTITSaoqM5mZ7gYH2fYICRXOBo4GNxowG4gNPBowGjAbeHXZ4//8kiCi/wrcNmrC3hB+sYDQmru3htI7k3t7oXLzI3ZfG+JMEbsjNo9v/4SviCN677EjsuxZQHqGq2C6mWWMB8YV45NxTv2LmaqaLcNveGRStSfAJh2l6myIM4lURUwqt3IXnRGjlFKkIrIsWUBKhqtguplljAfGFePzL+fEvwwA")
+size_override = Vector2(36, 34)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rses4"]
 atlas = SubResource("PortableCompressedTexture2D_px4uc")
@@ -16,7 +16,11 @@ region = Rect2(0, 0, 18, 17)
 atlas = SubResource("PortableCompressedTexture2D_px4uc")
 region = Rect2(18, 0, 18, 17)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_u8fum"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8fum"]
+atlas = SubResource("PortableCompressedTexture2D_px4uc")
+region = Rect2(0, 17, 18, 17)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_npcay"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -24,6 +28,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e6ta3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8fum")
 }],
 "loop": true,
 "name": &"default",
@@ -40,7 +47,7 @@ colorRect = NodePath("ColorRect")
 
 [node name="Background" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-sprite_frames = SubResource("SpriteFrames_u8fum")
+sprite_frames = SubResource("SpriteFrames_npcay")
 metadata/_aseprite_wizard_interface_config_ = {
 "animation_section": false,
 "layer_section": false,
@@ -60,7 +67,7 @@ metadata/_aseprite_wizard_config_ = {
 "source": "res://assets/glow.aseprite",
 "source_uid": 2059709371620793624
 }
-metadata/_aseprite_wizard_source_file_hash_ = "9cbdbed5a5014a3e27d456e723f6fb2f"
+metadata/_aseprite_wizard_source_file_hash_ = "49a12235f31d47e56c9335d7e26e7d06"
 
 [node name="ColorRect" type="ColorRect" parent="."]
 visible = false
