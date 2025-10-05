@@ -10,6 +10,8 @@ public partial class MemoryBlock : Area2D {
   public Program? AssignedProgram { get; private set; }
 
   [Export] private Color freeColor = new(0.5f, 0.5f, 0.5f);
+  [Export] private Color corruptedColor = new(0.2f, 0.2f, 0.2f);
+  [Export] private Sprite2D? lightSprite;
 
   private bool isCorrupted;
   public bool IsFree => AssignedProgram is null && !isCorrupted;
@@ -19,9 +21,28 @@ public partial class MemoryBlock : Area2D {
   }
 
   public override void _Process(double delta) {
-    if (Global.Instance.DimFreeMemory && AssignedProgram is { IsDead: true }) {
-      setColor(c => new Color(c.R, c.G, c.B, 0.5f));
+    var canBeClicked = Global.Services.Get<GameLoop>().IsGarbageCollecting;
+    updateColor(canBeClicked);
+
+    if (lightSprite is not null) {
+      lightSprite.Visible = canBeClicked && !isCorrupted;
     }
+  }
+
+  private void updateColor(bool canBeClicked) {
+    if (isCorrupted) {
+      setColor(corruptedColor);
+      return;
+    }
+
+    var color = isCorrupted ? corruptedColor : AssignedProgram?.Color ?? freeColor;
+    if (!canBeClicked) {
+      color = Color.FromHsv(color.H, color.S, color.V * 0.75f);
+    }
+    if (Global.Instance.DimFreeMemory && AssignedProgram is { IsDead: true }) {
+      color = new Color(color.R, color.G, color.B, 0.5f);
+    }
+    setColor(color);
   }
 
   public bool TrySimulateClick(Vector2 position, [NotNullWhen(true)] out Program? freedProgram) {
