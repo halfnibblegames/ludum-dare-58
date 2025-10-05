@@ -17,9 +17,12 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
 
   private MemoryBlock[] blocks = [];
 
+  private int streak;
+  private double streakCooldown;
+
   public MemoryBlock this[int x, int y] {
     get => blocks[x + y * Width];
-    set => blocks[x + y * Width] = value;
+    private set => blocks[x + y * Width] = value;
   }
 
   public float MemoryUsage { get; private set; }
@@ -39,6 +42,11 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
 
   public override void _Process(double delta) {
     MemoryUsage = (float) blocks.Count(b => !b.IsFree) / blocks.Length;
+    streakCooldown -= delta;
+    if (streakCooldown <= 0) {
+      streak = 0;
+      streakCooldown = 0;
+    }
   }
 
   public override void _Input(InputEvent @event) {
@@ -57,19 +65,21 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
     for (var i = 0; i < blocks.Length; i++) {
       if (!blocks[i].TrySimulateClick(position, out var freedProgram)) continue;
 
+      var scoreTracker = Global.Services.Get<ScoreTracker>();
       if (blocks[i].IsFree) {
-        var scoreTracker = Global.Services.Get<ScoreTracker>();
         scoreTracker.MemoryFreed();
-        Global.Services.Get<SoundPlayer>().PlayConfirm();
+        streak++;
+        streakCooldown = 0.3;
+        Global.Services.Get<SoundPlayer>().PlayConfirm(streak);
       }
 
-      if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram);
+      if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram, scoreTracker);
 
       break;
     }
   }
 
-  private void freeSurroundingMemory(int from, Program program) {
+  private void freeSurroundingMemory(int from, Program program, ScoreTracker scoreTracker) {
     var q = new Queue<int>();
     q.Enqueue(from);
     var seen = new HashSet<int> { from };
@@ -80,7 +90,10 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
         // Don't propagate further if the block has a different program (exception for the initial tile).
         continue;
 
-      if (!block.IsFree) block.FreeMemory();
+      if (!block.IsFree) {
+        block.FreeMemory();
+        scoreTracker.MemoryFreed();
+      }
 
       foreach (var neighbor in adjacentIndices(idx))
         // Queue neighbouring tiles.

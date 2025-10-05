@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using HalfNibbleGame.Autoload;
 
@@ -18,8 +19,8 @@ public partial class SoundPlayer : Node {
     player = GetNode<AudioStreamPlayer>("Player");
   }
 
-  public void PlayConfirm() {
-    play(confirm);
+  public void PlayConfirm(int streak) {
+    play(confirm, streak);
   }
 
   public void PlayError() {
@@ -38,10 +39,18 @@ public partial class SoundPlayer : Node {
     play(program);
   }
 
-  private void play(AudioStream? stream) {
+  private void play(AudioStream? stream, int streak = 0) {
     if (player is null || stream is null) return;
 
     player.Stop();
+
+    if (streak > 1) {
+      player.PitchScale = 1 + Math.Min(5, streak - 1) * 0.2f;
+    }
+    else {
+      player.PitchScale = 1;
+    }
+
     player.Stream = stream;
     player.Play();
   }
