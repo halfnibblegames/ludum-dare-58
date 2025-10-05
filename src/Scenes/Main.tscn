@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://bn1xhxvduovxo"]
+[gd_scene load_steps=6 format=3 uid="uid://bn1xhxvduovxo"]
 
 [ext_resource type="PackedScene" uid="uid://cqrb5682t73m2" path="res://src/Scenes/Game.tscn" id="1_cmrm7"]
 [ext_resource type="Script" uid="uid://xslpex7fix1w" path="res://src/Scenes/UiManager.cs" id="2_n3v4m"]
+[ext_resource type="Script" uid="uid://dwd1prdbvvkdi" path="res://src/Animations/ShakeCamera2D.cs" id="3_tmvmo"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kwadw"]
 font_size = 32
@@ -102,3 +103,7 @@ offset_top = 538.0
 offset_right = 1190.0
 offset_bottom = 561.0
 text = "Defragment"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+anchor_mode = 0
+script = ExtResource("3_tmvmo")

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using HalfNibbleGame.Animations;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Nodes.Systems;
 using HalfNibbleGame.Scenes;
@@ -71,6 +72,9 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
         streak++;
         streakCooldown = 0.3;
         Global.Services.Get<SoundPlayer>().PlayConfirm(streak);
+        if (streak > 1) {
+          Global.Services.Get<ShakeCamera2D>().Shake(0.3f * streak);
+        }
       }
 
       if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram, scoreTracker);
