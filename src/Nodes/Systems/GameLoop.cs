@@ -98,10 +98,10 @@ public sealed partial class GameLoop : Node {
     var existingPrograms = new List<Program>(taskManager.Programs);
     Random.Shared.Shuffle(CollectionsMarshal.AsSpan(existingPrograms));
 
-    closingCount = existingPrograms.Count <= minPrograms
+    closingCount = existingPrograms.Count <= 0
       ? 0
       // Close at least one, at most 4 or the maximum number we can close to get to our min program count.
-      : rng.RandiRange(1, Math.Min(4, existingPrograms.Count - minPrograms));
+      : rng.RandiRange(1, Math.Min(4, Math.Max(1, existingPrograms.Count - minPrograms)));
 
     // Close the first closeCount programs, the rest will be simulated for a chance to modify their memory footprint.
     var programsToClose = existingPrograms.Take(closingCount).ToList();
@@ -118,8 +118,8 @@ public sealed partial class GameLoop : Node {
   private void planNewPrograms(ITaskManager taskManager, int minPrograms, int closingCount) {
     var openAfterClosing = taskManager.Programs.Count - closingCount;
 
-    // Open at least 1 program, and at least enough to get us to min programs (mostly relevant for first cycle).
-    var minProgramsToOpen = Math.Max(1, minPrograms - openAfterClosing);
+    // Open at least 1 program, and at least enough to get us to min programs + 1 (mostly relevant for first cycle).
+    var minProgramsToOpen = Math.Max(1, 1 + minPrograms - openAfterClosing);
     var maxProgramsToOpen = minPrograms - (taskManager.Programs.Count / 2);
     // Reduce the probability of more programs opening as the memory gets more full.
     var memoryUsage = taskManager.MemoryUsage;
@@ -128,8 +128,8 @@ public sealed partial class GameLoop : Node {
     if (memoryUsage >= 0.90 && rng.Randf() < 0.7) maxProgramsToOpen--;
     if (memoryUsage >= 0.94 && rng.Randf() < 0.8) maxProgramsToOpen--;
     if (memoryUsage >= 0.98 && rng.Randf() < 0.9) maxProgramsToOpen--;
-    // Ensure we always open at least enough programs to meet min programs.
-    maxProgramsToOpen = Math.Max(minPrograms - openAfterClosing, maxProgramsToOpen);
+    // Ensure we always open at least enough programs to meet min programs + 1.
+    maxProgramsToOpen = Math.Max(1 + minPrograms - openAfterClosing, maxProgramsToOpen);
 
     var openingCount = rng.RandiRange(minProgramsToOpen, maxProgramsToOpen);
     var programsToOpen = new List<Program>();
