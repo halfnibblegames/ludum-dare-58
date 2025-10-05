@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Godot;
 using HalfNibbleGame.Autoload;
+using HalfNibbleGame.Nodes;
 using HalfNibbleGame.Nodes.Systems;
 
 namespace HalfNibbleGame.Scenes;
@@ -15,11 +17,28 @@ public partial class MemoryBlock : Area2D {
   [Export] private ColorRect? colorRect;
   [Export] private Sprite2D? lightSprite;
 
+  private MemoryGrid? grid;
+  private (int X, int Y) coordinates;
   private bool isCorrupted;
   public bool IsFree => AssignedProgram is null && !isCorrupted;
 
   public override void _Ready() {
     setColor(freeColor);
+  }
+
+  public void AssignToGrid(MemoryGrid g, (int X, int Y) coords) {
+    grid = g;
+    coordinates = coords;
+  }
+
+  public IEnumerable<MemoryBlock> AdjacentBlocks {
+    get {
+      if (grid == null) yield break;
+      if (coordinates.X < MemoryGrid.Width - 1) yield return grid[coordinates.X + 1, coordinates.Y];
+      if (coordinates.Y < MemoryGrid.Height - 1) yield return grid[coordinates.X, coordinates.Y + 1];
+      if (coordinates.X > 0) yield return grid[coordinates.X - 1, coordinates.Y];
+      if (coordinates.Y > 0) yield return grid[coordinates.X, coordinates.Y - 1];
+    }
   }
 
   public override void _Process(double delta) {

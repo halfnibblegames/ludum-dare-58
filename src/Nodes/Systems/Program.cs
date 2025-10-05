@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Godot;
 using HalfNibbleGame.Scenes;
 
@@ -11,6 +12,7 @@ public class Program(ITaskManager taskManager, string name, Color color) {
 
   // Should this program crash when memory is freed?
   protected virtual bool ShouldCrashOnFree => !IsDead;
+  protected ITaskManager TaskManager => taskManager;
 
   public string Name => name;
   public Color Color => color;
@@ -65,13 +67,43 @@ public class Virus(ITaskManager taskManager, Color color) : Program(taskManager,
   protected override bool ShouldCrashOnFree => false;
 
   public override void SimulateCycle(RandomNumberGenerator rng) {
-    taskManager.AddMemoryToProcess(this, AllocatedMemory.Count);
+    // We copy into a list: better to not loop over a hash set anyway, but we're actually modifying the hash set!
+    foreach (var memoryBlock in AllocatedMemory.ToList()) {
+      var adjacentBlocks = memoryBlock.AdjacentBlocks.ToList();
+      if (adjacentBlocks.Count == 0) {
+        GD.PushWarning("There should always be adjacent blocks");
+      }
+      var pickedBlock = adjacentBlocks[rng.RandiRange(0, adjacentBlocks.Count - 1)];
+      attemptToSpread(pickedBlock);
+    }
+  }
+
+  private void attemptToSpread(MemoryBlock block) {
+    // Viruses are nice to each other.
+    if (block.AssignedProgram is Virus) {
+      return;
+    }
+    // Spread into an empty block.
+    if (block.IsFree) {
+      block.AssignProgram(this);
+      return;
+    }
+    // Block is already assigned to a different program, see if there is at least two virus tiles adjacent before
+    // corrupting.
+    var adjacentVirusCount = block.AdjacentBlocks.Count(b => b.AssignedProgram is Virus);
+    if (adjacentVirusCount >= 2) {
+      block.FreeMemory();
+      // If it wasn't corrupted, the program wasn't running anymore. Great, we'll occupy it instead.
+      if (block.IsFree) {
+        block.AssignProgram(this);
+      }
+    }
   }
 
   public override void OnMemoryFreed(MemoryBlock memoryBlock) {
     base.OnMemoryFreed(memoryBlock);
     if (AllocatedMemory.Count == 0 && !IsDead) {
-      taskManager.KillProcess(this);
+      TaskManager.KillProcess(this);
     }
   }
 }

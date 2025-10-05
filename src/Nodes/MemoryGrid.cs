@@ -8,27 +8,28 @@ using HalfNibbleGame.Scenes;
 namespace HalfNibbleGame.Nodes;
 
 public partial class MemoryGrid : Node2D {
-  private const int width = 10;
-  private const int height = 7;
+  public const int Width = 10;
+  public const int Height = 7;
   private const float blockWidth = 18;
   private const float blockHeight = 17;
   private const float blockMargin = 1;
 
   private MemoryBlock[] blocks = [];
 
-  private MemoryBlock this[int x, int y] {
-    get => blocks[x + y * width];
-    set => blocks[x + y * width] = value;
+  public MemoryBlock this[int x, int y] {
+    get => blocks[x + y * Width];
+    set => blocks[x + y * Width] = value;
   }
 
   public float MemoryUsage { get; private set; }
 
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
-    blocks = new MemoryBlock[width * height];
-    for (var y = 0; y < height; y++)
-    for (var x = 0; x < width; x++) {
+    blocks = new MemoryBlock[Width * Height];
+    for (var y = 0; y < Height; y++)
+    for (var x = 0; x < Width; x++) {
       var node = Global.Prefabs.MemoryBlock.Instantiate<MemoryBlock>();
+      node.AssignToGrid(this, (x, y));
       node.Position = new Vector2((x + 0.5f) * (blockWidth + blockMargin), (y + 0.5f) * (blockHeight + blockMargin));
       this[x, y] = node;
       AddChild(node);
@@ -85,13 +86,13 @@ public partial class MemoryGrid : Node2D {
 
   private IEnumerable<int> adjacentIndices(int idx) {
     // Above
-    if (idx >= width) yield return idx - width;
+    if (idx >= Width) yield return idx - Width;
     // Right
-    if (idx % width < width - 1) yield return idx + 1;
+    if (idx % Width < Width - 1) yield return idx + 1;
     // Below
-    if (idx < blocks.Length - width) yield return idx + width;
+    if (idx < blocks.Length - Width) yield return idx + Width;
     // Left
-    if (idx % width > 0) yield return idx - 1;
+    if (idx % Width > 0) yield return idx - 1;
   }
 
   public void AllocateProgram(Program program, int size) {
