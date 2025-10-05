@@ -1,0 +1,18 @@
+[gd_scene load_steps=7 format=3 uid="uid://raqg17kghdta"]
+
+[ext_resource type="Script" uid="uid://217b6sd13cr1" path="res://src/Scenes/SoundPlayer.cs" id="1_oq424"]
+[ext_resource type="AudioStream" uid="uid://bfhix33ob08kb" path="res://assets/sfx/confirm.wav" id="2_w3osx"]
+[ext_resource type="AudioStream" uid="uid://bf1erhwf56f6j" path="res://assets/sfx/error.wav" id="3_llta8"]
+[ext_resource type="AudioStream" uid="uid://bqyh2hdvtl4om" path="res://assets/sfx/end.wav" id="4_13pjn"]
+[ext_resource type="AudioStream" uid="uid://dg0mqv2uvb7uh" path="res://assets/sfx/end_perfect.wav" id="5_u2atm"]
+[ext_resource type="AudioStream" uid="uid://by7ajmyamrtm4" path="res://assets/sfx/program.wav" id="6_hu3ih"]
+
+[node name="SoundPlayer" type="Node"]
+script = ExtResource("1_oq424")
+confirm = ExtResource("2_w3osx")
+error = ExtResource("3_llta8")
+end = ExtResource("4_13pjn")
+endPerfect = ExtResource("5_u2atm")
+program = ExtResource("6_hu3ih")
+
+[node name="Player" type="AudioStreamPlayer" parent="."]

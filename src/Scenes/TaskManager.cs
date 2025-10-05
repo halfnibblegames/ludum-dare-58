@@ -64,6 +64,8 @@ public partial class TaskManager : Node2D, ITaskManager {
     var programListEntry = Global.Prefabs.ProgramListEntry.Instantiate<ProgramListEntry>();
     programListEntry.SetProgram(program);
     programListContainer.AddChild(programListEntry);
+
+    Global.Services.Get<SoundPlayer>().PlayProgram();
   }
 
   public void AddMemoryToProcess(Program program, int memoryAdded) {
@@ -81,6 +83,8 @@ public partial class TaskManager : Node2D, ITaskManager {
     // Remove from the UI.
     var childToRemove = programListContainer.GetChildren()[index];
     programListContainer.RemoveChild(childToRemove);
+
+    Global.Services.Get<SoundPlayer>().PlayProgram();
   }
 
   public void CrashProcess(Program program) {

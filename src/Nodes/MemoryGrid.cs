@@ -57,8 +57,11 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
     for (var i = 0; i < blocks.Length; i++) {
       if (!blocks[i].TrySimulateClick(position, out var freedProgram)) continue;
 
-      var scoreTracker = Global.Services.Get<ScoreTracker>();
-      scoreTracker.MemoryFreed();
+      if (blocks[i].IsFree) {
+        var scoreTracker = Global.Services.Get<ScoreTracker>();
+        scoreTracker.MemoryFreed();
+        Global.Services.Get<SoundPlayer>().PlayConfirm();
+      }
 
       if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram);
 

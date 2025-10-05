@@ -31,31 +31,49 @@ public sealed partial class GameLoop : Node {
 
   public override void _Process(double delta) {
     if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) {
-      checkEndOfCycleScore();
-      startComputerSimulation();
+      endGarbageCollecting();
     }
   }
 
-  private void checkEndOfCycleScore() {
-    if (scoreTracker is null) return;
-    scoreTracker.CycleCompleted();
+  private void endGarbageCollecting()
+  {
+    var perfect = checkPerfect();
 
-    var perfect = true;
+    updateScore(perfect);
+
+    var soundPlayer = Global.Services.Get<SoundPlayer>();
+    if (perfect) {
+      soundPlayer.PlayEndPerfect();
+    }
+    else {
+      soundPlayer.PlayEnd();
+    }
+
+    startComputerSimulation();
+  }
+
+  private bool checkPerfect() {
     var grid = Global.Services.Get<MemoryGrid>();
     foreach (var block in grid) {
       if (block.AssignedProgram is { IsDead: true } or Virus) {
-        perfect = false;
-        break;
+        return false;
       }
     }
 
+    return true;
+  }
+
+  private void updateScore(bool perfect) {
+    if (scoreTracker is null) return;
+    scoreTracker.CycleCompleted();
     if (perfect) {
       scoreTracker.PerfectCycleCompleted();
     }
   }
 
   public void InterruptGarbageCollecting() {
-    // TODO: error sound
+    var soundPlayer = Global.Services.Get<SoundPlayer>();
+    soundPlayer.PlayError();
     startComputerSimulation();
   }
 
