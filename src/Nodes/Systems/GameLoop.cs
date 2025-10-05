@@ -19,6 +19,7 @@ public sealed partial class GameLoop : Node {
   [Export] private Graph? memoryGraph;
 
   private ScoreTracker? scoreTracker;
+  private TutorialPhase activeTutorial;
   private int cycleNumber;
 
   public bool IsGarbageCollecting { get; private set; }
@@ -33,6 +34,38 @@ public sealed partial class GameLoop : Node {
   public override void _Process(double delta) {
     if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) {
       endGarbageCollecting();
+    }
+  }
+
+  public override void _Input(InputEvent @event) {
+    if (activeTutorial == TutorialPhase.None) return;
+    if (@event is not InputEventMouseButton { Pressed: true, ButtonIndex: MouseButton.Left }) return;
+
+    var tutorial = Global.Services.Get<Tutorial>();
+    var taskManager = Global.Services.Get<ITaskManager>();
+
+    switch (activeTutorial) {
+      case TutorialPhase.List:
+        // Close a random program that's not a virus to give the player something to do.
+        var nonVirusPrograms = taskManager.Programs.Where(p => p is not Virus).ToList();
+        var randomProgram = nonVirusPrograms[rng.RandiRange(0, nonVirusPrograms.Count - 1)];
+        randomProgram.Kill();
+        tutorial.ShowFreeMemoryExplanation();
+        activeTutorial = TutorialPhase.Memory;
+        break;
+      case TutorialPhase.Memory:
+        tutorial.ShowCorruptionExplanation();
+        activeTutorial = TutorialPhase.Corruption;
+        break;
+      case TutorialPhase.Corruption:
+        // Tutorial is over
+        tutorial.Hide();
+        startGarbageCollecting();
+        activeTutorial = TutorialPhase.None;
+        break;
+      case TutorialPhase.None:
+      default:
+        throw new ArgumentOutOfRangeException();
     }
   }
 
@@ -97,7 +130,17 @@ public sealed partial class GameLoop : Node {
 
     planCycle(taskManager);
 
-    Animations.Animations.DoDelayed(simulationDuration, startGarbageCollecting);
+    Animations.Animations.DoDelayed(simulationDuration, finishComputerSimulation);
+  }
+
+  private void finishComputerSimulation() {
+    if (cycleNumber != 1) { // No more tutorial needed
+      startGarbageCollecting();
+      return;
+    }
+
+    Global.Services.Get<Tutorial>().ShowApplicationListExplanation();
+    activeTutorial = TutorialPhase.List;
   }
 
   private static Color randomColor() {
@@ -180,5 +223,12 @@ public sealed partial class GameLoop : Node {
     }
 
     return availableNames.Concat(Enumerable.Range(0, count - availableNames.Count).Select(i => $"Program{i}")).ToList();
+  }
+
+  enum TutorialPhase {
+    None,
+    List,
+    Memory,
+    Corruption
   }
 }

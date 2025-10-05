@@ -40,7 +40,7 @@ position = Vector2(78, 28)
 script = ExtResource("4_6wgcs")
 
 [node name="ProgressBar" type="ReferenceRect" parent="."]
-offset_left = 276.0
+offset_left = 274.0
 offset_top = 91.0
 offset_right = 305.0
 offset_bottom = 97.0

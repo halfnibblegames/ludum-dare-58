@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bn1xhxvduovxo"]
+[gd_scene load_steps=8 format=3 uid="uid://bn1xhxvduovxo"]
 
 [ext_resource type="PackedScene" uid="uid://cqrb5682t73m2" path="res://src/Scenes/Game.tscn" id="1_cmrm7"]
 [ext_resource type="Script" uid="uid://xslpex7fix1w" path="res://src/Scenes/UiManager.cs" id="2_n3v4m"]
+[ext_resource type="Script" uid="uid://buq515h0dcir6" path="res://src/Nodes/Tutorial.cs" id="3_j4yc3"]
 [ext_resource type="Script" uid="uid://dwd1prdbvvkdi" path="res://src/Animations/ShakeCamera2D.cs" id="3_tmvmo"]
+[ext_resource type="PackedScene" uid="uid://dnu2oyugc5pvh" path="res://src/Scenes/ControlPrompt.tscn" id="4_xyvdf"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kwadw"]
 font_size = 32
@@ -103,6 +105,91 @@ offset_top = 538.0
 offset_right = 1190.0
 offset_bottom = 561.0
 text = "Defragment"
+
+[node name="Tutorial" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+script = ExtResource("3_j4yc3")
+
+[node name="ReferenceRect" type="ReferenceRect" parent="Tutorial"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 84.0
+offset_right = 303.0
+offset_bottom = 634.0
+mouse_filter = 2
+
+[node name="MaskRects" type="Control" parent="Tutorial"]
+anchors_preset = 0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+
+[node name="Left" type="ColorRect" parent="Tutorial/MaskRects"]
+layout_mode = 0
+offset_right = 41.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.7058824)
+
+[node name="Right" type="ColorRect" parent="Tutorial/MaskRects"]
+layout_mode = 0
+offset_left = 304.0
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.7058824)
+
+[node name="Top" type="ColorRect" parent="Tutorial/MaskRects"]
+layout_mode = 0
+offset_left = 41.0
+offset_right = 304.0
+offset_bottom = 85.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.7058824)
+
+[node name="Bottom" type="ColorRect" parent="Tutorial/MaskRects"]
+layout_mode = 0
+offset_left = 41.0
+offset_top = 635.0
+offset_right = 304.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0, 0, 0, 0.7058824)
+
+[node name="Label" type="Label" parent="Tutorial"]
+layout_mode = 0
+offset_left = 308.0
+offset_top = 82.0
+offset_right = 570.0
+offset_bottom = 183.0
+text = "Open applications are shown in this list. Applications that are open should never have their memory garbage collected."
+autowrap_mode = 2
+
+[node name="MemoryReference" type="ReferenceRect" parent="Tutorial"]
+layout_mode = 0
+offset_left = 294.0
+offset_top = 89.0
+offset_right = 1085.0
+offset_bottom = 619.0
+mouse_filter = 2
+
+[node name="ControllerPrompt" parent="Tutorial" instance=ExtResource("4_xyvdf")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34
+anchor_top = 0.29900002
+anchor_right = 0.34
+anchor_bottom = 0.29900002
+offset_left = -16.200012
+offset_top = -16.280014
+offset_right = -0.2000122
+offset_bottom = -0.28001404
+scale = Vector2(2, 2)
+ShownInput = 15
 
 [node name="Camera2D" type="Camera2D" parent="."]
 anchor_mode = 0
