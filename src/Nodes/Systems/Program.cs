@@ -16,10 +16,9 @@ public class Program(ITaskManager taskManager, string name, Color color) {
   public Color Color => color;
 
   public virtual void SimulateCycle(RandomNumberGenerator rng) {
-    if (rng.Randf() < 0.5) {
+    if (rng.Randf() < 0.75) {
       taskManager.AddMemoryToProcess(this, rng.RandiRange(1, 3));
     }
-    // Add memory
   }
 
   public void OnMemoryAllocated(MemoryBlock memoryBlock) {

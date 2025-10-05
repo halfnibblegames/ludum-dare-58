@@ -17,6 +17,8 @@ public sealed partial class GameLoop : Node {
 
   [Export] private Graph? memoryGraph;
 
+  private int cycleNumber;
+
   public bool IsGarbageCollecting { get; private set; }
   public double GarbageCollectingTimeLeft => garbageCollectTimer?.TimeLeft ?? 0;
 
@@ -42,6 +44,8 @@ public sealed partial class GameLoop : Node {
   }
 
   private void startComputerSimulation() {
+    cycleNumber++;
+
     var taskManager = Global.Services.Get<ITaskManager>();
 
     memoryGraph?.PushDataPoint(taskManager.MemoryUsage);
@@ -61,37 +65,67 @@ public sealed partial class GameLoop : Node {
   }
 
   private void planCycle(ITaskManager taskManager) {
-    var programs = new List<Program>(taskManager.Programs);
-    Random.Shared.Shuffle(CollectionsMarshal.AsSpan(programs));
-    var closeCount = rng.RandiRange(1, Math.Min(4, programs.Count - 1));
-    var openCount = rng.RandiRange(Math.Max(0, 3 - programs.Count), 5 - closeCount);
+    // The minimum number of programs we want active is 2 + sqrt(cycle)
+    var minPrograms = 2 + (int) Math.Sqrt(cycleNumber);
 
-    // Existing programs
-    var programsToClose = programs.Take(closeCount).ToList();
-    var programsToSimulate = programs.Skip(closeCount).ToList();
+    planExistingPrograms(taskManager, minPrograms, out var closingCount);
+    planNewPrograms(taskManager, minPrograms, closingCount);
+  }
 
-    // New programs
-    var programsToOpen = new List<Program>();
-    if (openCount > 0 && !programs.Any(p => p is Virus) && rng.Randf() < 0.1) {
-      openCount--;
-      programsToOpen.Add(new Virus(taskManager, taskManager.GetNextColor()));
-    }
+  private void planExistingPrograms(ITaskManager taskManager, int minPrograms, out int closingCount)
+  {
+    var existingPrograms = new List<Program>(taskManager.Programs);
+    Random.Shared.Shuffle(CollectionsMarshal.AsSpan(existingPrograms));
 
-    programsToOpen.AddRange(
-      selectRandomNames(taskManager, openCount)
-        .Select(name => new Program(taskManager, name, taskManager.GetNextColor())));
+    closingCount = existingPrograms.Count <= minPrograms
+      ? 0
+      // Close at least one, at most 4 or the maximum number we can close to get to our min program count.
+      : rng.RandiRange(1, Math.Min(4, existingPrograms.Count - minPrograms));
+
+    // Close the first closeCount programs, the rest will be simulated for a chance to modify their memory footprint.
+    var programsToClose = existingPrograms.Take(closingCount).ToList();
+    var programsToSimulate = existingPrograms.Skip(closingCount).ToList();
 
     foreach (var p in programsToClose) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.Kill());
     }
-
     foreach (var p in programsToSimulate) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.SimulateCycle(rng));
     }
+  }
+
+  private void planNewPrograms(ITaskManager taskManager, int minPrograms, int closingCount) {
+    var openAfterClosing = taskManager.Programs.Count - closingCount;
+
+    // Open at least 1 program, and at least enough to get us to min programs (mostly relevant for first cycle).
+    var minProgramsToOpen = Math.Max(1, minPrograms - openAfterClosing);
+    var maxProgramsToOpen = minPrograms - (taskManager.Programs.Count / 2);
+    // Reduce the probability of more programs opening as the memory gets more full.
+    var memoryUsage = taskManager.MemoryUsage;
+    if (memoryUsage >= 0.75 && rng.Randf() < 0.5) maxProgramsToOpen--;
+    if (memoryUsage >= 0.85 && rng.Randf() < 0.6) maxProgramsToOpen--;
+    if (memoryUsage >= 0.90 && rng.Randf() < 0.7) maxProgramsToOpen--;
+    if (memoryUsage >= 0.94 && rng.Randf() < 0.8) maxProgramsToOpen--;
+    if (memoryUsage >= 0.98 && rng.Randf() < 0.9) maxProgramsToOpen--;
+    // Ensure we always open at least enough programs to meet min programs.
+    maxProgramsToOpen = Math.Max(minPrograms - openAfterClosing, maxProgramsToOpen);
+
+    var openingCount = rng.RandiRange(minProgramsToOpen, maxProgramsToOpen);
+    var programsToOpen = new List<Program>();
+
+    // One in five times, if there is no virus yet, add a virus.
+    if (openingCount > 0 && !taskManager.Programs.Any(p => p is Virus) && rng.Randf() < 0.2) {
+      openingCount--;
+      programsToOpen.Add(new Virus(taskManager, taskManager.GetNextColor()));
+    }
+
+    programsToOpen.AddRange(
+      selectRandomNames(taskManager, openingCount)
+        .Select(name => new Program(taskManager, name, taskManager.GetNextColor())));
 
     foreach (var p in programsToOpen) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
-        () => taskManager.AllocateProgram(p, rng.RandiRange(3, 8)));
+        () => taskManager.AllocateProgram(p, rng.RandiRange(2, 5)));
     }
   }
 
