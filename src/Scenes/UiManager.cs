@@ -1,0 +1,34 @@
+using System;
+using Godot;
+using HalfNibbleGame.Autoload;
+using HalfNibbleGame.Nodes.Systems;
+
+namespace HalfNibbleGame.Scenes;
+
+public partial class UiManager : Control {
+  [Export] private Label? scoreLabel;
+  [Export] private Label? scoreNoticeLabel;
+
+  private int lastKnownScore;
+  private double nextScoreUpdate;
+
+  public override void _Process(double delta) {
+    nextScoreUpdate -= delta;
+    var tracker = Global.Services.Get<ScoreTracker>();
+
+    if (nextScoreUpdate <= 0 && scoreLabel is not null) {
+      var currentScore = tracker.Score;
+      var interpolate = (int) (0.5 * currentScore + 0.5 * lastKnownScore);
+      if (Math.Abs(interpolate - currentScore) < 5) interpolate = currentScore;
+      lastKnownScore = interpolate;
+      scoreLabel.Text = lastKnownScore.ToString();
+
+      // Only update the score 20 times per second;
+      nextScoreUpdate = 0.05;
+    }
+
+    if (scoreNoticeLabel is not null) {
+      scoreNoticeLabel.Text = tracker.ScoreNotice;
+    }
+  }
+}

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
@@ -7,7 +8,7 @@ using HalfNibbleGame.Scenes;
 
 namespace HalfNibbleGame.Nodes;
 
-public partial class MemoryGrid : Node2D {
+public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
   public const int Width = 10;
   public const int Height = 7;
   private const float blockWidth = 18;
@@ -55,6 +56,9 @@ public partial class MemoryGrid : Node2D {
   private void simulateClickAt(Vector2 position) {
     for (var i = 0; i < blocks.Length; i++) {
       if (!blocks[i].TrySimulateClick(position, out var freedProgram)) continue;
+
+      var scoreTracker = Global.Services.Get<ScoreTracker>();
+      scoreTracker.MemoryFreed();
 
       if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram);
 
@@ -105,5 +109,13 @@ public partial class MemoryGrid : Node2D {
     }
 
     if (leftToAllocate > 0) GD.Print("game over");
+  }
+
+  public IEnumerator<MemoryBlock> GetEnumerator() {
+    return blocks.AsEnumerable().GetEnumerator();
+  }
+
+  IEnumerator IEnumerable.GetEnumerator() {
+    return GetEnumerator();
   }
 }

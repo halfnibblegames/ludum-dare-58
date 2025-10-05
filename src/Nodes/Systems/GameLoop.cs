@@ -17,6 +17,7 @@ public sealed partial class GameLoop : Node {
 
   [Export] private Graph? memoryGraph;
 
+  private ScoreTracker? scoreTracker;
   private int cycleNumber;
 
   public bool IsGarbageCollecting { get; private set; }
@@ -24,12 +25,32 @@ public sealed partial class GameLoop : Node {
 
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
+    Global.Services.ProvideInScene(scoreTracker = new ScoreTracker());
     CallDeferred(nameof(startComputerSimulation));
   }
 
   public override void _Process(double delta) {
     if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) {
+      checkEndOfCycleScore();
       startComputerSimulation();
+    }
+  }
+
+  private void checkEndOfCycleScore() {
+    if (scoreTracker is null) return;
+    scoreTracker.CycleCompleted();
+
+    var perfect = true;
+    var grid = Global.Services.Get<MemoryGrid>();
+    foreach (var block in grid) {
+      if (block.AssignedProgram is { IsDead: true } or Virus) {
+        perfect = false;
+        break;
+      }
+    }
+
+    if (perfect) {
+      scoreTracker.PerfectCycleCompleted();
     }
   }
 

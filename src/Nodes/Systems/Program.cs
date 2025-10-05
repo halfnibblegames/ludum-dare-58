@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Godot;
+using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Scenes;
 
 namespace HalfNibbleGame.Nodes.Systems;
@@ -104,6 +105,7 @@ public class Virus(ITaskManager taskManager, Color color) : Program(taskManager,
     base.OnMemoryFreed(memoryBlock);
     if (AllocatedMemory.Count == 0 && !IsDead) {
       TaskManager.KillProcess(this);
+      Global.Services.Get<ScoreTracker>().VirusKilled();
     }
   }
 }

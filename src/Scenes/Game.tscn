@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cuiw8v0h58o2x" path="res://src/Scenes/TaskManager.tscn" id="3_6wgcs"]
 [ext_resource type="Script" uid="uid://cl1a1im5yk7fm" path="res://src/Nodes/MemoryGrid.cs" id="4_6wgcs"]
 [ext_resource type="Script" uid="uid://b6h8hf1x6xsfp" path="res://src/Nodes/ProgressBar.cs" id="7_35kcs"]
-[ext_resource type="PackedScene" path="res://src/Scenes/Graph.tscn" id="8_2xgsq"]
+[ext_resource type="PackedScene" uid="uid://l7jh2kc4eueu" path="res://src/Scenes/Graph.tscn" id="8_2xgsq"]
 
 [node name="Game" type="Node2D"]
 
@@ -50,4 +50,4 @@ grow_vertical = 2
 color = Color(0.9121169, 0.49450552, 0.25197247, 1)
 
 [node name="Graph" parent="." instance=ExtResource("8_2xgsq")]
-position = Vector2(275, 36)
+position = Vector2(274, 36)
