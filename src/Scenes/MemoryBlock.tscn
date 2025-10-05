@@ -33,11 +33,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6tqwb"]
 size = Vector2(18, 17)
 
-[node name="MemoryBlock" type="Area2D" node_paths=PackedStringArray("background", "colorRect", "lightSprite")]
+[node name="MemoryBlock" type="Area2D" node_paths=PackedStringArray("background", "colorRect")]
 script = ExtResource("1_otyng")
 background = NodePath("Background")
 colorRect = NodePath("ColorRect")
-lightSprite = NodePath("Light")
 
 [node name="Background" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
@@ -78,4 +77,5 @@ shape = SubResource("RectangleShape2D_6tqwb")
 texture = ExtResource("2_6tqwb")
 
 [node name="Light" type="Sprite2D" parent="."]
+visible = false
 texture = ExtResource("3_px4uc")
