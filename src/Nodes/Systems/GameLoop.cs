@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Godot;
+using HalfNibbleGame.Animations;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Scenes;
 
@@ -74,6 +75,7 @@ public sealed partial class GameLoop : Node {
   public void InterruptGarbageCollecting() {
     var soundPlayer = Global.Services.Get<SoundPlayer>();
     soundPlayer.PlayError();
+    Global.Services.Get<ShakeCamera2D>().Shake(1);
     startComputerSimulation();
   }
 
