@@ -16,8 +16,9 @@
 
 [node name="SoundPlayer" parent="." instance=ExtResource("2_5tu00")]
 
-[node name="GameLoop" type="Node" parent="."]
+[node name="GameLoop" type="Node" parent="." node_paths=PackedStringArray("memoryGraph")]
 script = ExtResource("1_bg83v")
+memoryGraph = NodePath("../Graph")
 
 [node name="Wallpaper" type="Sprite2D" parent="."]
 position = Vector2(160, 90)
@@ -54,3 +55,4 @@ color = Color(0.9121169, 0.49450552, 0.25197247, 1)
 
 [node name="Graph" parent="." instance=ExtResource("8_2xgsq")]
 position = Vector2(274, 36)
+graphColor = Color(1, 1, 0, 1)
