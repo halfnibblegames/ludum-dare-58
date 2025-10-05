@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://de86j2tjnmtes"]
+[gd_scene load_steps=2 format=3 uid="uid://c252vffs3tbay"]
 
 [ext_resource type="Script" uid="uid://bu15vkhqiadyf" path="res://src/Scenes/ProgramListEntry.cs" id="1_o02db"]
 
@@ -11,6 +11,7 @@ offset_right = -880.0
 offset_bottom = -680.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("1_o02db")
 
 [node name="StartMargin" type="Control" parent="."]
