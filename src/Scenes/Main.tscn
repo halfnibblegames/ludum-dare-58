@@ -23,5 +23,40 @@ render_target_update_mode = 4
 layout_direction = 2
 offset_left = 56.0
 offset_top = 82.0
-offset_right = 386.0
+offset_right = 267.0
 offset_bottom = 645.0
+
+[node name="RAM Usage" type="Label" parent="."]
+offset_left = 1099.0
+offset_top = 98.0
+offset_right = 1185.0
+offset_bottom = 121.0
+text = "RAM usage"
+
+[node name="Collection Time" type="Label" parent="."]
+offset_left = 1100.0
+offset_top = 302.0
+offset_right = 1219.0
+offset_bottom = 325.0
+text = "Time to Collect"
+
+[node name="Score" type="Label" parent="."]
+offset_left = 1099.0
+offset_top = 418.0
+offset_right = 1218.0
+offset_bottom = 441.0
+text = "Score"
+
+[node name="Defrag" type="Label" parent="."]
+offset_left = 1097.0
+offset_top = 538.0
+offset_right = 1190.0
+offset_bottom = 561.0
+text = "Defragment"
+
+[node name="ActivityManager" type="Label" parent="."]
+offset_left = 57.0
+offset_top = 53.0
+offset_right = 187.0
+offset_bottom = 76.0
+text = "Activity Manager"

@@ -3,14 +3,16 @@ using Godot;
 namespace HalfNibbleGame.Autoload;
 
 public sealed partial class Global : Node {
+  private static Prefabs? prefabs;
 
-  [ExportCategory("Experiments")]
-  [Export] public bool DimFreeMemory;
+  private readonly ServiceProvider services = new();
+
+  [ExportCategory("Experiments")] [Export]
+  public bool DimFreeMemory;
+
   [Export] public bool FreeAdjacentMemory;
 
   public static IServiceProvider Services => Instance.services;
-
-  private static Prefabs? prefabs;
 
   public static Prefabs Prefabs {
     get {
@@ -21,8 +23,6 @@ public sealed partial class Global : Node {
 
   // This will be set in _Ready, and since Global is automatically loaded, this will always be true.
   public static Global Instance { get; private set; } = null!;
-
-  private readonly ServiceProvider services = new();
 
   public override void _Ready() {
     Instance = this;

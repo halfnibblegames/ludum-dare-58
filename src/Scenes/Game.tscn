@@ -32,14 +32,14 @@ position = Vector2(320, 180)
 gizmo_extents = 4.0
 
 [node name="MemoryGrid" type="Node2D" parent="."]
-position = Vector2(109, 28)
+position = Vector2(78, 28)
 script = ExtResource("4_6wgcs")
 
 [node name="ProgressBar" type="ReferenceRect" parent="."]
-offset_left = 222.0
-offset_top = 173.0
-offset_right = 318.0
-offset_bottom = 179.0
+offset_left = 276.0
+offset_top = 91.0
+offset_right = 305.0
+offset_bottom = 97.0
 script = ExtResource("7_35kcs")
 
 [node name="Progress" type="ColorRect" parent="ProgressBar"]
@@ -50,4 +50,4 @@ grow_vertical = 2
 color = Color(0.9121169, 0.49450552, 0.25197247, 1)
 
 [node name="Graph" parent="." instance=ExtResource("8_2xgsq")]
-position = Vector2(188, 167)
+position = Vector2(275, 36)

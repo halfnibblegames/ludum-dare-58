@@ -14,7 +14,7 @@ grow_vertical = 2
 script = ExtResource("1_o02db")
 
 [node name="StartMargin" type="Control" parent="."]
-custom_minimum_size = Vector2(20, 0)
+custom_minimum_size = Vector2(10, 0)
 layout_mode = 2
 
 [node name="Color" type="ColorRect" parent="."]

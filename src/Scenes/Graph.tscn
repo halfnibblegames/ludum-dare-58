@@ -1,4 +1,4 @@
-[gd_scene load_steps=2 format=3 uid="uid://cdar3bpapjaca"]
+[gd_scene load_steps=2 format=3 uid="uid://l7jh2kc4eueu"]
 
 [ext_resource type="Script" uid="uid://befe5ppud2ekk" path="res://src/Scenes/Graph.cs" id="1_xusxu"]
 
