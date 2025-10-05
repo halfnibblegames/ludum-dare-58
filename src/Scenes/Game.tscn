@@ -7,15 +7,14 @@
 [ext_resource type="PackedScene" uid="uid://cuiw8v0h58o2x" path="res://src/Scenes/TaskManager.tscn" id="3_6wgcs"]
 [ext_resource type="Script" uid="uid://cl1a1im5yk7fm" path="res://src/Nodes/MemoryGrid.cs" id="4_6wgcs"]
 [ext_resource type="Script" uid="uid://b6h8hf1x6xsfp" path="res://src/Nodes/ProgressBar.cs" id="7_35kcs"]
-[ext_resource type="PackedScene" uid="uid://cdar3bpapjaca" path="res://src/Scenes/Graph.tscn" id="8_2xgsq"]
+[ext_resource type="PackedScene" path="res://src/Scenes/Graph.tscn" id="8_2xgsq"]
 
 [node name="Game" type="Node2D"]
 
 [node name="AnimationRunner" parent="." instance=ExtResource("1_f61ph")]
 
-[node name="GameLoop" type="Node" parent="." node_paths=PackedStringArray("memoryGraph")]
+[node name="GameLoop" type="Node" parent="."]
 script = ExtResource("1_bg83v")
-memoryGraph = NodePath("../Graph")
 
 [node name="Wallpaper" type="Sprite2D" parent="."]
 position = Vector2(160, 90)
@@ -33,7 +32,7 @@ position = Vector2(320, 180)
 gizmo_extents = 4.0
 
 [node name="MemoryGrid" type="Node2D" parent="."]
-position = Vector2(109, 25)
+position = Vector2(109, 28)
 script = ExtResource("4_6wgcs")
 
 [node name="ProgressBar" type="ReferenceRect" parent="."]

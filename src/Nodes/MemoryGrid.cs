@@ -10,7 +10,8 @@ namespace HalfNibbleGame.Nodes;
 public partial class MemoryGrid : Node2D {
   private const int width = 10;
   private const int height = 7;
-  private const float blockSize = 18;
+  private const float blockWidth = 18;
+  private const float blockHeight = 17;
   private const float blockMargin = 1;
 
   private MemoryBlock[] blocks = [];
@@ -28,7 +29,7 @@ public partial class MemoryGrid : Node2D {
     for (var y = 0; y < height; y++)
     for (var x = 0; x < width; x++) {
       var node = Global.Prefabs.MemoryBlock.Instantiate<MemoryBlock>();
-      node.Position = new Vector2((x + 0.5f) * (blockSize + blockMargin), (y + 0.5f) * (blockSize + blockMargin));
+      node.Position = new Vector2((x + 0.5f) * (blockWidth + blockMargin), (y + 0.5f) * (blockHeight + blockMargin));
       this[x, y] = node;
       AddChild(node);
     }
@@ -46,18 +47,15 @@ public partial class MemoryGrid : Node2D {
 
     if (@event is InputEventMouseMotion mouseMotion && mouseMotion.ButtonMask.HasFlag(MouseButtonMask.Left) &&
         // Disable dragging if the adjacent memory experiment is on.
-        !Global.Instance.FreeAdjacentMemory) {
+        !Global.Instance.FreeAdjacentMemory)
       simulateClickAt(mouseMotion.Position);
-    }
   }
 
   private void simulateClickAt(Vector2 position) {
     for (var i = 0; i < blocks.Length; i++) {
       if (!blocks[i].TrySimulateClick(position, out var freedProgram)) continue;
 
-      if (Global.Instance.FreeAdjacentMemory) {
-        freeSurroundingMemory(i, freedProgram);
-      }
+      if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram);
 
       break;
     }
@@ -70,20 +68,18 @@ public partial class MemoryGrid : Node2D {
 
     while (q.TryDequeue(out var idx)) {
       var block = blocks[idx];
-      if (idx != from && block.AssignedProgram != program) {
+      if (idx != from && block.AssignedProgram != program)
         // Don't propagate further if the block has a different program (exception for the initial tile).
         continue;
-      }
 
       if (!block.IsFree) block.FreeMemory();
 
-      foreach (var neighbor in adjacentIndices(idx)) {
+      foreach (var neighbor in adjacentIndices(idx))
         // Queue neighbouring tiles.
         if (!seen.Contains(neighbor)) {
           q.Enqueue(neighbor);
           seen.Add(neighbor);
         }
-      }
     }
   }
 
@@ -100,8 +96,7 @@ public partial class MemoryGrid : Node2D {
 
   public void AllocateProgram(Program program, int size) {
     var leftToAllocate = size;
-    foreach (var t in blocks)
-    {
+    foreach (var t in blocks) {
       if (!t.IsFree) continue;
       t.AssignProgram(program);
       leftToAllocate--;
