@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Godot;
 using HalfNibbleGame.Autoload;
 using HalfNibbleGame.Nodes;
@@ -20,23 +22,19 @@ public interface ITaskManager {
 }
 
 public partial class TaskManager : Node2D, ITaskManager {
-  private static readonly List<Color> availableProgramColors = [
-    Color.FromString("#FFADAD", Colors.Red),
-    Color.FromString("#FFD6A5", Colors.Orange),
-    Color.FromString("#FDFFB6", Colors.Yellow),
-    Color.FromString("#CAFFBF", Colors.Green),
-    Color.FromString("#9BF6FF", Colors.Cyan),
-    Color.FromString("#A0C4FF", Colors.Blue),
-    Color.FromString("#BDB2FF", Colors.Purple),
-    Color.FromString("#FFC6FF", Colors.Pink),
-    Colors.Red,
-    Colors.Orange,
-    Colors.Yellow,
-    Colors.Green,
-    Colors.Cyan,
-    Colors.Blue,
-    Colors.Purple,
-    Colors.Pink
+  private readonly List<Color> availableProgramColors = [
+    Color.FromHtml("2f4f4f"), // dark slate gray
+    Color.FromHtml("228b22"), // forest green
+    Color.FromHtml("7b68ee"), // medium slate blue
+    Color.FromHtml("ff8c00"), // dark orange
+    Color.FromHtml("9acd32"), // yellow green
+    Color.FromHtml("00ff7f"), // spring green
+    Color.FromHtml("dc143c"), // crimson
+    Color.FromHtml("ffa07a"), // light salmon
+    Color.FromHtml("1e90ff"), // dodger blue
+    Color.FromHtml("ff1493"), // deep pink
+    Color.FromHtml("eee8aa"), // pale golden rod
+    Color.FromHtml("dda0dd"), // plum
   ];
 
   private readonly List<Program> programs = [];
@@ -95,6 +93,7 @@ public partial class TaskManager : Node2D, ITaskManager {
 
   public override void _Ready() {
     base._Ready();
+    Random.Shared.Shuffle(CollectionsMarshal.AsSpan(availableProgramColors));
     Global.Services.ProvidePersistent<ITaskManager>(this);
     programListContainer = GetNode<VBoxContainer>("../../../../ProgramList");
   }

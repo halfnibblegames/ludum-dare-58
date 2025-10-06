@@ -160,11 +160,6 @@ public sealed partial class GameLoop : Node {
     activeTutorial = TutorialPhase.List;
   }
 
-  private static Color randomColor() {
-    var hue = rng.Randf();
-    return Color.FromHsv(hue, 1, 1);
-  }
-
   private void planCycle(ITaskManager taskManager) {
     // The minimum number of programs we want active is 2 + sqrt(cycle)
     var minPrograms = 2 + (int) Math.Sqrt(cycleNumber);
@@ -212,6 +207,11 @@ public sealed partial class GameLoop : Node {
     maxProgramsToOpen = Math.Max(1 + minPrograms - openAfterClosing, maxProgramsToOpen);
 
     var openingCount = rng.RandiRange(minProgramsToOpen, maxProgramsToOpen);
+
+    if (openAfterClosing + openingCount > 12) {
+      openingCount = 12 - openAfterClosing;
+    }
+
     var programsToOpen = new List<Program>();
 
     // One in five times, if there is no virus yet, add a virus.
