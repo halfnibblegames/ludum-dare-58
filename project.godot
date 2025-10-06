@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="HalfNibbleGame"
+config/name="Gen0"
 run/main_scene="uid://bn1xhxvduovxo"
 config/features=PackedStringArray("4.5", "C#", "GL Compatibility")
 config/icon="res://icon.svg"
