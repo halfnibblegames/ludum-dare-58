@@ -10,23 +10,25 @@ using HalfNibbleGame.Scenes;
 namespace HalfNibbleGame.Nodes.Systems;
 
 public sealed partial class GameLoop : Node {
+  public const int CyclesPerDefrag = 8;
   private static readonly RandomNumberGenerator rng = new();
+  private TutorialPhase activeTutorial;
+  private int cycleNumber;
 
   [Export] public float GarbageCollectionDuration = 4f;
   private SceneTreeTimer? garbageCollectTimer;
-  [Export] private float simulationDuration = 4f;
-  public const int CyclesPerDefrag = 8;
 
   [Export] private Graph? memoryGraph;
 
   private ScoreTracker? scoreTracker;
-  private TutorialPhase activeTutorial;
-  private int cycleNumber;
+  [Export] private float simulationDuration = 4f;
+  private DateTimeOffset startTimestamp;
 
   public bool IsGarbageCollecting { get; private set; }
   public double GarbageCollectingTimeLeft => garbageCollectTimer?.TimeLeft ?? 0;
   public bool CanDefrag => IsGarbageCollecting && DefragsAvailable > 0;
   public int DefragsAvailable { get; private set; }
+  public bool GameIsOver { get; set; }
 
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
@@ -35,9 +37,19 @@ public sealed partial class GameLoop : Node {
   }
 
   public override void _Process(double delta) {
-    if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) {
-      endGarbageCollecting();
+    if (GameIsOver) {
+      var gameOverOverlay = GetNode<Control>("../../../../GameOverOverlay");
+      if (!gameOverOverlay.Visible) {
+        gameOverOverlay.Visible = true;
+        var now = DateTimeOffset.UtcNow;
+        var gameDuration = now - startTimestamp;
+        var scoreLabel = gameOverOverlay.GetNode<Label>("ScoreLabel");
+        scoreLabel.Text =
+          $"It crashed after {gameDuration.TotalMinutes:0}:{gameDuration.TotalSeconds:00} and your score is {scoreTracker?.Score ?? 0}.";
+      }
     }
+
+    if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) endGarbageCollecting();
   }
 
   public override void _Input(InputEvent @event) {
@@ -79,23 +91,19 @@ public sealed partial class GameLoop : Node {
     updateScore(perfect);
 
     var soundPlayer = Global.Services.Get<SoundPlayer>();
-    if (perfect) {
+    if (perfect)
       soundPlayer.PlayEndPerfect();
-    }
-    else {
+    else
       soundPlayer.PlayEnd();
-    }
 
     startComputerSimulation();
   }
 
   private bool checkPerfect() {
     var grid = Global.Services.Get<MemoryGrid>();
-    foreach (var block in grid) {
-      if (block.AssignedProgram is { IsDead: true } or Virus) {
+    foreach (var block in grid)
+      if (block.AssignedProgram is { IsDead: true } or Virus)
         return false;
-      }
-    }
 
     return true;
   }
@@ -103,9 +111,7 @@ public sealed partial class GameLoop : Node {
   private void updateScore(bool perfect) {
     if (scoreTracker is null) return;
     scoreTracker.CycleCompleted();
-    if (perfect) {
-      scoreTracker.PerfectCycleCompleted();
-    }
+    if (perfect) scoreTracker.PerfectCycleCompleted();
   }
 
   public void InterruptGarbageCollecting() {
@@ -123,6 +129,8 @@ public sealed partial class GameLoop : Node {
   }
 
   private void startComputerSimulation() {
+    if (cycleNumber == 0) startTimestamp = DateTimeOffset.UtcNow;
+
     cycleNumber++;
     GetNode<Label>("../../../../UIManager/CurrentCycle").Text = cycleNumber.ToString();
 
@@ -182,13 +190,11 @@ public sealed partial class GameLoop : Node {
     var programsToClose = existingPrograms.Take(closingCount).ToList();
     var programsToSimulate = existingPrograms.Skip(closingCount).ToList();
 
-    foreach (var p in programsToClose.Where(p => p is not Virus)) {
+    foreach (var p in programsToClose.Where(p => p is not Virus))
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.Kill());
-    }
 
-    foreach (var p in programsToSimulate) {
+    foreach (var p in programsToSimulate)
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.SimulateCycle(rng));
-    }
   }
 
   private void planNewPrograms(ITaskManager taskManager, int minPrograms, int closingCount) {
@@ -209,9 +215,7 @@ public sealed partial class GameLoop : Node {
 
     var openingCount = rng.RandiRange(minProgramsToOpen, maxProgramsToOpen);
 
-    if (openAfterClosing + openingCount > 12) {
-      openingCount = Math.Max(0, 12 - openAfterClosing);
-    }
+    if (openAfterClosing + openingCount > 12) openingCount = Math.Max(0, 12 - openAfterClosing);
 
     var programsToOpen = new List<Program>();
 
@@ -225,10 +229,9 @@ public sealed partial class GameLoop : Node {
       selectRandomNames(taskManager, openingCount)
         .Select(name => new Program(taskManager, name, taskManager.GetNextColor())));
 
-    foreach (var p in programsToOpen) {
+    foreach (var p in programsToOpen)
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration),
         () => taskManager.AllocateProgram(p, rng.RandiRange(2, 5)));
-    }
   }
 
   private IList<string> selectRandomNames(ITaskManager taskManager, int count) {
@@ -236,9 +239,7 @@ public sealed partial class GameLoop : Node {
     var availableNames = Program.PossibleNames.Where(n => !existingNames.Contains(n)).ToList();
     Random.Shared.Shuffle(CollectionsMarshal.AsSpan(availableNames));
 
-    if (availableNames.Count >= count) {
-      return availableNames[..count];
-    }
+    if (availableNames.Count >= count) return availableNames[..count];
 
     return availableNames.Concat(Enumerable.Range(0, count - availableNames.Count).Select(i => $"Program{i}")).ToList();
   }
@@ -246,9 +247,7 @@ public sealed partial class GameLoop : Node {
   private string selectRandomVirusName(ITaskManager taskManager) {
     var existingNames = taskManager.Programs.Select(p => p.Name).ToHashSet();
     var availableNames = Program.VirusNames.Where(n => !existingNames.Contains(n)).ToList();
-    if (availableNames.Count == 0) {
-      return "Rick Astley"; // The probability that this happens...
-    }
+    if (availableNames.Count == 0) return "Rick Astley"; // The probability that this happens...
 
     return availableNames[rng.RandiRange(0, availableNames.Count - 1)];
   }
@@ -266,7 +265,7 @@ public sealed partial class GameLoop : Node {
     startComputerSimulation();
   }
 
-  enum TutorialPhase {
+  private enum TutorialPhase {
     None,
     List,
     Memory,
