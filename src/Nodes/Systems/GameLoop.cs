@@ -15,7 +15,7 @@ public sealed partial class GameLoop : Node {
   [Export] public float GarbageCollectionDuration = 4f;
   private SceneTreeTimer? garbageCollectTimer;
   [Export] private float simulationDuration = 4f;
-  public const int CyclesPerDefrag = 3;
+  public const int CyclesPerDefrag = 8;
 
   [Export] private Graph? memoryGraph;
 
