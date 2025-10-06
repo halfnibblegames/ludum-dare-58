@@ -10,7 +10,7 @@ public sealed partial class Global : Node {
   [ExportCategory("Experiments")] [Export]
   public bool DimFreeMemory;
 
-  [Export] public bool FreeAdjacentMemory;
+  [Export] public bool FreeAdjacentMemory = true;
 
   public static IServiceProvider Services => Instance.services;
 
