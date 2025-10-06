@@ -214,17 +214,17 @@ autowrap_mode = 2
 
 [node name="MemoryReference" type="ReferenceRect" parent="Tutorial"]
 layout_mode = 0
-offset_left = 294.0
-offset_top = 85.0
-offset_right = 1085.0
-offset_bottom = 634.0
+offset_left = 290.0
+offset_top = 95.0
+offset_right = 1082.0
+offset_bottom = 630.0
 mouse_filter = 2
 
 [node name="DefragReference" type="ReferenceRect" parent="Tutorial"]
 layout_mode = 0
-offset_left = 1089.0
-offset_top = 532.0
-offset_right = 1226.0
+offset_left = 1090.0
+offset_top = 535.0
+offset_right = 1225.0
 offset_bottom = 630.0
 mouse_filter = 2
 
