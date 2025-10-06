@@ -46,7 +46,10 @@ public sealed partial class GameLoop : Node {
         var scoreLabel = gameOverOverlay.GetNode<Label>("ScoreLabel");
         scoreLabel.Text =
           $"It crashed after {gameDuration.TotalMinutes:0}:{gameDuration.TotalSeconds:00} and your score is {scoreTracker?.Score ?? 0}.";
+        Global.Services.Get<GlitchShader>().GlitchPermanently();
       }
+
+      return;
     }
 
     if (IsGarbageCollecting && GarbageCollectingTimeLeft <= 0) endGarbageCollecting();

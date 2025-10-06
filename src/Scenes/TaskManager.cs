@@ -53,6 +53,8 @@ public partial class TaskManager : Node2D, ITaskManager {
   }
 
   public void AllocateProgram(Program program, int memoryNeeded) {
+    if (Global.Services.Get<GameLoop>().GameIsOver) return;
+
     // Add program to the internal list.
     programs.Add(program);
 
@@ -72,6 +74,8 @@ public partial class TaskManager : Node2D, ITaskManager {
   }
 
   public void KillProcess(Program program) {
+    if (Global.Services.Get<GameLoop>().GameIsOver) return;
+
     // Remove from internal list.
     var index = programs.IndexOf(program);
     programs.RemoveAt(index);
