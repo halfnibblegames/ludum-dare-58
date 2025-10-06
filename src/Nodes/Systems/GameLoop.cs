@@ -114,6 +114,7 @@ public sealed partial class GameLoop : Node {
     var soundPlayer = Global.Services.Get<SoundPlayer>();
     soundPlayer.PlayError();
     Global.Services.Get<ShakeCamera2D>().Shake(1);
+    Global.Services.Get<GlitchShader>().OneOffGlitch();
     startComputerSimulation();
   }
 
