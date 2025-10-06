@@ -11,10 +11,12 @@ uniform float shift_amount = 12.0;
 
 uniform float shuffle_speed = 3.7;
 
+uniform float rand_offset = 0.0;
+
 uniform sampler2D screen_texture : hint_screen_texture, filter_nearest;
 
 float random(float seed) {
-  return fract(sin(dot(vec2(seed, seed), vec2(12.9898, 4.1414))) * 43758.5453);
+  return fract(sin(dot(vec2(rand_offset + seed, rand_offset + seed), vec2(12.9898, 4.1414))) * 43758.5453);
 }
 
 void fragment() {

@@ -1,5 +1,6 @@
-[gd_scene load_steps=8 format=4 uid="uid://bdssvaj4laelm"]
+[gd_scene load_steps=10 format=4 uid="uid://bdssvaj4laelm"]
 
+[ext_resource type="Shader" uid="uid://btaa8xp5mi320" path="res://assets/glitch.gdshader" id="1_6tqwb"]
 [ext_resource type="Script" uid="uid://dnadjay5qmtql" path="res://src/Scenes/MemoryBlock.cs" id="1_otyng"]
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_otyng"]
@@ -35,13 +36,24 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6tqwb"]
+shader = ExtResource("1_6tqwb")
+shader_parameter/overall_amount = 0.0
+shader_parameter/block_size = 23.0
+shader_parameter/shake_amount = 1.0
+shader_parameter/shift_speed = 5.0
+shader_parameter/shift_amount = 7.0
+shader_parameter/shuffle_speed = 3.7
+shader_parameter/rand_offset = 0.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6tqwb"]
 size = Vector2(72, 70)
 
-[node name="MemoryBlock" type="Area2D" node_paths=PackedStringArray("background", "colorRect")]
+[node name="MemoryBlock" type="Area2D" node_paths=PackedStringArray("background", "colorRect", "virusRect")]
 script = ExtResource("1_otyng")
 background = NodePath("Background")
-colorRect = NodePath("ColorRect")
+colorRect = NodePath("SubViewportContainer/SubViewport/ColorRect")
+virusRect = NodePath("SubViewportContainer/SubViewport/VirusGlitch")
 
 [node name="Background" type="AnimatedSprite2D" parent="."]
 visible = false
@@ -70,11 +82,26 @@ metadata/_aseprite_wizard_config_ = {
 }
 metadata/_aseprite_wizard_source_file_hash_ = "c49d5ca293aa7b481b4f1338c7eeafe5"
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -36.0
-offset_top = -35.0
-offset_right = 36.0
-offset_bottom = 35.0
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 40.0
+offset_bottom = 37.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+size = Vector2i(80, 80)
+
+[node name="ColorRect" type="ColorRect" parent="SubViewportContainer/SubViewport"]
+offset_left = 4.0
+offset_top = 5.0
+offset_right = 76.0
+offset_bottom = 75.0
+
+[node name="VirusGlitch" type="ColorRect" parent="SubViewportContainer/SubViewport"]
+material = SubResource("ShaderMaterial_6tqwb")
+offset_left = -1.0
+offset_right = 81.0
+offset_bottom = 80.0
 
 [node name="MouseCollision" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_6tqwb")

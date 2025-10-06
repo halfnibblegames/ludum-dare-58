@@ -15,6 +15,7 @@ public partial class MemoryBlock : Area2D {
   [Export] private Color corruptedColor = new(0.2f, 0.2f, 0.2f);
   [Export] private AnimatedSprite2D? background;
   [Export] private ColorRect? colorRect;
+  [Export] private ColorRect? virusRect;
   [Export] private Sprite2D? lightSprite;
 
   private MemoryGrid? grid;
@@ -24,6 +25,11 @@ public partial class MemoryBlock : Area2D {
 
   public override void _Ready() {
     setColor(freeColor);
+    if (virusRect is not null) {
+      var duplicated = (ShaderMaterial) virusRect.Material.Duplicate();
+      duplicated.SetShaderParameter("rand_offset", (float) Random.Shared.NextDouble());
+      virusRect.Material = duplicated;
+    }
   }
 
   public void AssignToGrid(MemoryGrid g, (int X, int Y) coords) {
@@ -46,15 +52,23 @@ public partial class MemoryBlock : Area2D {
 
     var canBeClicked = Global.Services.Get<GameLoop>().IsGarbageCollecting;
     var shouldLightUp = canBeClicked && !IsCorrupted;
-    if (background is not null) {
+    if (background is not null && virusRect is not null) {
+      var material = (ShaderMaterial) virusRect.Material;
+
       if (!shouldLightUp) {
         background.Frame = 0;
+        material.SetShaderParameter("overall_amount", 0f);
+        Modulate = new Color(Colors.White, 0.7f);
       }
       else if (AssignedProgram is Virus) {
         background.Frame = 2;
+        material.SetShaderParameter("overall_amount", 0.75f);
+        Modulate = Colors.White;
       }
       else {
         background.Frame = 1;
+        material.SetShaderParameter("overall_amount", 0f);
+        Modulate = Colors.White;
       }
     }
 
