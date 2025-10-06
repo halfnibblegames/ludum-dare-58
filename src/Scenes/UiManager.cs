@@ -42,4 +42,11 @@ public partial class UiManager : Control {
   public void OnDefragButtonClicked() {
     Global.Services.Get<GameLoop>().Defrag();
   }
+
+  public void OnRestartButtonClicked() {
+    // We use an intermediate scene to make sure we have a frame to clean up all the services.
+    // Ideally the game over screen would have been a separate scene but... path of least resistance
+    Global.Instance.SwitchScene("uid://veqm5h1saokm");
+    // GetNode("/root/Main").Free();
+  }
 }

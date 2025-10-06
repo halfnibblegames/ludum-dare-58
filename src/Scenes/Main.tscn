@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bn1xhxvduovxo"]
+[gd_scene load_steps=14 format=3 uid="uid://bn1xhxvduovxo"]
 
 [ext_resource type="PackedScene" uid="uid://cqrb5682t73m2" path="res://src/Scenes/Game.tscn" id="1_cmrm7"]
 [ext_resource type="Texture2D" uid="uid://bfwytpc45o1d2" path="res://assets/bsod.png" id="1_eml7d"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://dnu2oyugc5pvh" path="res://src/Scenes/ControlPrompt.tscn" id="4_xyvdf"]
 [ext_resource type="Shader" uid="uid://btaa8xp5mi320" path="res://assets/glitch.gdshader" id="6_eml7d"]
 [ext_resource type="Script" uid="uid://cu7ayb8mcg6om" path="res://src/Nodes/GlitchShader.cs" id="7_d85jq"]
+[ext_resource type="Texture2D" uid="uid://s4taas8shef1" path="res://assets/restart.png" id="8_3efb3"]
 [ext_resource type="Texture2D" uid="uid://c3gpp4fed2i83" path="res://assets/qr.png" id="9_p301h"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kwadw"]
@@ -298,6 +299,15 @@ position = Vector2(199.00002, 568)
 scale = Vector2(0.6013986, 0.5862069)
 texture = ExtResource("9_p301h")
 
+[node name="RestartButton" type="TextureButton" parent="GameOverOverlay"]
+layout_mode = 0
+offset_left = 1205.0
+offset_top = 641.0
+offset_right = 1333.0
+offset_bottom = 779.0
+scale = Vector2(0.5, 0.5)
+texture_normal = ExtResource("8_3efb3")
+
 [node name="ShaderOverlay" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_d85jq")
 offset_right = 1280.0
@@ -308,3 +318,4 @@ script = ExtResource("7_d85jq")
 glitchShader = SubResource("ShaderMaterial_d85jq")
 
 [connection signal="pressed" from="UIManager/DefragButton" to="UIManager" method="OnDefragButtonClicked"]
+[connection signal="pressed" from="GameOverOverlay/RestartButton" to="UIManager" method="OnRestartButtonClicked"]

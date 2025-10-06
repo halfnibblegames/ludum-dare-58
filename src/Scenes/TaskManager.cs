@@ -98,7 +98,7 @@ public partial class TaskManager : Node2D, ITaskManager {
   public override void _Ready() {
     base._Ready();
     Random.Shared.Shuffle(CollectionsMarshal.AsSpan(availableProgramColors));
-    Global.Services.ProvidePersistent<ITaskManager>(this);
+    Global.Services.ProvideInScene<ITaskManager>(this);
     programListContainer = GetNode<VBoxContainer>("../../../../ProgramList");
   }
 
