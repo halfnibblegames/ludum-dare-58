@@ -33,6 +33,14 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
     .Distinct()
     .ToList();
 
+  public IEnumerator<MemoryBlock> GetEnumerator() {
+    return blocks.AsEnumerable().GetEnumerator();
+  }
+
+  IEnumerator IEnumerable.GetEnumerator() {
+    return GetEnumerator();
+  }
+
   public override void _Ready() {
     Global.Services.ProvideInScene(this);
     blocks = new MemoryBlock[Width * Height];
@@ -97,12 +105,10 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
 
       if (block is { IsFree: false, IsCorrupted: false }) {
         block.FreeMemory();
-        if (from.IsCorrupted) {
+        if (from.IsCorrupted)
           block.Corrupt();
-        }
-        else {
+        else
           scoreTracker.MemoryFreed();
-        }
       }
 
       foreach (var neighbor in block.AdjacentBlocks)
@@ -130,18 +136,8 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
   }
 
   public void ResetAll() {
-    foreach (var b in blocks) {
-      if (!b.IsCorrupted) {
+    foreach (var b in blocks)
+      if (!b.IsCorrupted)
         b.Reset();
-      }
-    }
-  }
-
-  public IEnumerator<MemoryBlock> GetEnumerator() {
-    return blocks.AsEnumerable().GetEnumerator();
-  }
-
-  IEnumerator IEnumerable.GetEnumerator() {
-    return GetEnumerator();
   }
 }

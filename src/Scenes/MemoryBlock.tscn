@@ -1,8 +1,6 @@
-[gd_scene load_steps=10 format=4 uid="uid://bdssvaj4laelm"]
+[gd_scene load_steps=8 format=4 uid="uid://bdssvaj4laelm"]
 
 [ext_resource type="Script" uid="uid://dnadjay5qmtql" path="res://src/Scenes/MemoryBlock.cs" id="1_otyng"]
-[ext_resource type="Texture2D" uid="uid://bg2akpct6a63y" path="res://assets/block.png" id="2_6tqwb"]
-[ext_resource type="Texture2D" uid="uid://cu6hpvvph370s" path="res://assets/light.png" id="3_px4uc"]
 
 [sub_resource type="PortableCompressedTexture2D" id="PortableCompressedTexture2D_px4uc"]
 _data = PackedByteArray("AAADAAUAAAABAAAAJAAAACIAAADkAAAAUklGRtwAAABXRUJQVlA4TM8AAAAvI0AIEE+gqG0jNtZ/by+Up7ZtGzbm3entyqht24aNeXd6uzLzHwD8/7uTmTITSaoqM5mZ7gYH2fYICRXOBo4GNxowG4gNPBowGjAbeHXZ4//8kiCi/wrcNmrC3hB+sYDQmru3htI7k3t7oXLzI3ZfG+JMEbsjNo9v/4SviCN677EjsuxZQHqGq2C6mWWMB8YV45NxTv2LmaqaLcNveGRStSfAJh2l6myIM4lURUwqt3IXnRGjlFKkIrIsWUBKhqtguplljAfGFePzL+fEvwwA")
@@ -46,6 +44,7 @@ background = NodePath("Background")
 colorRect = NodePath("ColorRect")
 
 [node name="Background" type="AnimatedSprite2D" parent="."]
+visible = false
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_npcay")
 metadata/_aseprite_wizard_interface_config_ = {
@@ -70,19 +69,10 @@ metadata/_aseprite_wizard_config_ = {
 metadata/_aseprite_wizard_source_file_hash_ = "49a12235f31d47e56c9335d7e26e7d06"
 
 [node name="ColorRect" type="ColorRect" parent="."]
-visible = false
 offset_left = -9.0
 offset_top = -8.0
 offset_right = 9.0
-offset_bottom = 8.0
+offset_bottom = 9.0
 
 [node name="MouseCollision" type="CollisionShape2D" parent="."]
-visible = false
 shape = SubResource("RectangleShape2D_6tqwb")
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_6tqwb")
-
-[node name="Light" type="Sprite2D" parent="."]
-visible = false
-texture = ExtResource("3_px4uc")

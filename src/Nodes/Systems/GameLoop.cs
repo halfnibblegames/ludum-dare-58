@@ -124,6 +124,7 @@ public sealed partial class GameLoop : Node {
 
   private void startComputerSimulation() {
     cycleNumber++;
+    GetNode<Label>("../../../../UIManager/CurrentCycle").Text = cycleNumber.ToString();
 
     var taskManager = Global.Services.Get<ITaskManager>();
 
@@ -195,7 +196,7 @@ public sealed partial class GameLoop : Node {
 
     // Open at least 1 program, and at least enough to get us to min programs + 1 (mostly relevant for first cycle).
     var minProgramsToOpen = Math.Max(1, 1 + minPrograms - openAfterClosing);
-    var maxProgramsToOpen = minPrograms - (taskManager.Programs.Count / 2);
+    var maxProgramsToOpen = minPrograms - taskManager.Programs.Count / 2;
     // Reduce the probability of more programs opening as the memory gets more full.
     var memoryUsage = taskManager.MemoryUsage;
     if (memoryUsage >= 0.75 && rng.Randf() < 0.5) maxProgramsToOpen--;
