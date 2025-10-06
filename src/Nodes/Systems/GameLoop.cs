@@ -210,7 +210,7 @@ public sealed partial class GameLoop : Node {
     var openingCount = rng.RandiRange(minProgramsToOpen, maxProgramsToOpen);
 
     if (openAfterClosing + openingCount > 12) {
-      openingCount = 12 - openAfterClosing;
+      openingCount = Math.Max(0, 12 - openAfterClosing);
     }
 
     var programsToOpen = new List<Program>();
