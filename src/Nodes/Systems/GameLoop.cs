@@ -121,7 +121,7 @@ public sealed partial class GameLoop : Node {
     if (!IsGarbageCollecting) return;
     var soundPlayer = Global.Services.Get<SoundPlayer>();
     soundPlayer.PlayError();
-    Global.Services.Get<ShakeCamera2D>().Shake(1);
+    Global.Services.Get<ShakeCamera2D>().Shake(0.1f);
     Global.Services.Get<GlitchShader>().OneOffGlitch();
     startComputerSimulation();
   }
