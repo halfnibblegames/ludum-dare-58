@@ -68,57 +68,51 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
   }
 
   private void simulateClickAt(Vector2 position) {
-    for (var i = 0; i < blocks.Length; i++) {
-      if (!blocks[i].TrySimulateClick(position, out var freedProgram)) continue;
+    foreach (var block in blocks)
+    {
+      if (!block.TrySimulateClick(position, out var freedProgram)) continue;
 
       var scoreTracker = Global.Services.Get<ScoreTracker>();
-      if (blocks[i].IsFree) {
+      if (block.IsFree) {
         scoreTracker.MemoryFreed();
         streak++;
         streakCooldown = 0.3;
         Global.Services.Get<SoundPlayer>().PlayConfirm(streak);
       }
 
-      if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(i, freedProgram, scoreTracker);
+      if (Global.Instance.FreeAdjacentMemory) freeSurroundingMemory(block, freedProgram, scoreTracker);
 
       break;
     }
   }
 
-  private void freeSurroundingMemory(int from, Program program, ScoreTracker scoreTracker) {
-    var q = new Queue<int>();
+  private void freeSurroundingMemory(MemoryBlock from, Program program, ScoreTracker scoreTracker) {
+    var q = new Queue<MemoryBlock>();
     q.Enqueue(from);
-    var seen = new HashSet<int> { from };
+    var seen = new HashSet<MemoryBlock> { from };
 
-    while (q.TryDequeue(out var idx)) {
-      var block = blocks[idx];
-      if (idx != from && block.AssignedProgram != program)
+    while (q.TryDequeue(out var block)) {
+      if (block != from && block.AssignedProgram != program)
         // Don't propagate further if the block has a different program (exception for the initial tile).
         continue;
 
-      if (!block.IsFree) {
+      if (block is { IsFree: false, IsCorrupted: false }) {
         block.FreeMemory();
-        scoreTracker.MemoryFreed();
+        if (from.IsCorrupted) {
+          block.Corrupt();
+        }
+        else {
+          scoreTracker.MemoryFreed();
+        }
       }
 
-      foreach (var neighbor in adjacentIndices(idx))
+      foreach (var neighbor in block.AdjacentBlocks)
         // Queue neighbouring tiles.
         if (!seen.Contains(neighbor)) {
           q.Enqueue(neighbor);
           seen.Add(neighbor);
         }
     }
-  }
-
-  private IEnumerable<int> adjacentIndices(int idx) {
-    // Above
-    if (idx >= Width) yield return idx - Width;
-    // Right
-    if (idx % Width < Width - 1) yield return idx + 1;
-    // Below
-    if (idx < blocks.Length - Width) yield return idx + Width;
-    // Left
-    if (idx % Width > 0) yield return idx - 1;
   }
 
   public IEnumerable<MemoryBlock> AllocateProgram(Program program, int size, bool suppressProgramNotification = false) {

@@ -110,6 +110,7 @@ public sealed partial class GameLoop : Node {
   }
 
   public void InterruptGarbageCollecting() {
+    if (!IsGarbageCollecting) return;
     var soundPlayer = Global.Services.Get<SoundPlayer>();
     soundPlayer.PlayError();
     Global.Services.Get<ShakeCamera2D>().Shake(1);
