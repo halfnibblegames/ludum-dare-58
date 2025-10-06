@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://bn1xhxvduovxo"]
+[gd_scene load_steps=15 format=3 uid="uid://bn1xhxvduovxo"]
 
 [ext_resource type="PackedScene" uid="uid://cqrb5682t73m2" path="res://src/Scenes/Game.tscn" id="1_cmrm7"]
 [ext_resource type="Texture2D" uid="uid://bfwytpc45o1d2" path="res://assets/bsod.png" id="1_eml7d"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cu7ayb8mcg6om" path="res://src/Nodes/GlitchShader.cs" id="7_d85jq"]
 [ext_resource type="Texture2D" uid="uid://s4taas8shef1" path="res://assets/restart.png" id="8_3efb3"]
 [ext_resource type="Texture2D" uid="uid://c3gpp4fed2i83" path="res://assets/qr.png" id="9_p301h"]
+[ext_resource type="AudioStream" uid="uid://bngt3h1m03e4g" path="res://assets/loop.mp3" id="11_u2m37"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_kwadw"]
 font_size = 32
@@ -316,6 +317,11 @@ mouse_filter = 2
 color = Color(1, 1, 1, 0)
 script = ExtResource("7_d85jq")
 glitchShader = SubResource("ShaderMaterial_d85jq")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_u2m37")
+volume_db = -8.0
+autoplay = true
 
 [connection signal="pressed" from="UIManager/DefragButton" to="UIManager" method="OnDefragButtonClicked"]
 [connection signal="pressed" from="GameOverOverlay/RestartButton" to="UIManager" method="OnRestartButtonClicked"]
