@@ -275,7 +275,7 @@ offset_bottom = 465.0
 theme_override_font_sizes/font_size = 42
 text = "Your program ran into a problem and needs to restart."
 
-[node name="Label" type="Label" parent="GameOverOverlay"]
+[node name="ScoreLabel" type="Label" parent="GameOverOverlay"]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5

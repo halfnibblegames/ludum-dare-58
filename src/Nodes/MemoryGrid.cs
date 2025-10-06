@@ -130,9 +130,7 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
       if (leftToAllocate == 0) break;
     }
 
-    // TODO: set a game over flag somewhere. Then in GameLoop._Process do the actual game over checking.
-    //       Why? Because we're potentially deep down a method call stack and we might be interrupting an atomic op
-    if (leftToAllocate > 0) GD.Print("game over");
+    Global.Services.Get<GameLoop>().GameIsOver = leftToAllocate > 0;
   }
 
   public void ResetAll() {
