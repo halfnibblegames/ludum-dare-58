@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cltykehawjrjn"]
+
+[ext_resource type="Texture2D" uid="uid://bfwytpc45o1d2" path="res://assets/bsod.png" id="1_dlib1"]
+
+[node name="GameOver" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_dlib1")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
