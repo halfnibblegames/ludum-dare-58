@@ -1,10 +1,12 @@
-[gd_scene load_steps=15 format=3 uid="uid://bn1xhxvduovxo"]
+[gd_scene load_steps=17 format=3 uid="uid://bn1xhxvduovxo"]
 
 [ext_resource type="PackedScene" uid="uid://cqrb5682t73m2" path="res://src/Scenes/Game.tscn" id="1_cmrm7"]
 [ext_resource type="Texture2D" uid="uid://bfwytpc45o1d2" path="res://assets/bsod.png" id="1_eml7d"]
 [ext_resource type="Script" uid="uid://xslpex7fix1w" path="res://src/Scenes/UiManager.cs" id="2_n3v4m"]
 [ext_resource type="Script" uid="uid://buq515h0dcir6" path="res://src/Nodes/Tutorial.cs" id="3_j4yc3"]
+[ext_resource type="Texture2D" uid="uid://c58iba1t8d25s" path="res://assets/speaker.png" id="3_ojnsd"]
 [ext_resource type="Script" uid="uid://dwd1prdbvvkdi" path="res://src/Animations/ShakeCamera2D.cs" id="3_tmvmo"]
+[ext_resource type="Texture2D" uid="uid://b2ehdyjenvcha" path="res://assets/speaker-off.png" id="4_hg6nk"]
 [ext_resource type="PackedScene" uid="uid://dnu2oyugc5pvh" path="res://src/Scenes/ControlPrompt.tscn" id="4_xyvdf"]
 [ext_resource type="Shader" uid="uid://btaa8xp5mi320" path="res://assets/glitch.gdshader" id="6_eml7d"]
 [ext_resource type="Script" uid="uid://cu7ayb8mcg6om" path="res://src/Nodes/GlitchShader.cs" id="7_d85jq"]
@@ -31,6 +33,11 @@ shader_parameter/rand_offset = 0.0
 
 [node name="Main" type="Node2D"]
 
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_u2m37")
+volume_db = -8.0
+autoplay = true
+
 [node name="PixelPerfectContainer" type="SubViewportContainer" parent="."]
 offset_right = 1280.0
 offset_bottom = 720.0
@@ -53,7 +60,7 @@ offset_right = 267.0
 offset_bottom = 645.0
 mouse_filter = 2
 
-[node name="UIManager" type="Control" parent="." node_paths=PackedStringArray("scoreLabel", "scoreNoticeLabel", "defragButton")]
+[node name="UIManager" type="Control" parent="." node_paths=PackedStringArray("scoreLabel", "scoreNoticeLabel", "defragButton", "muteButton", "audioPlayer")]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1280.0
@@ -63,6 +70,10 @@ script = ExtResource("2_n3v4m")
 scoreLabel = NodePath("CurrentScore")
 scoreNoticeLabel = NodePath("ScoreNotice")
 defragButton = NodePath("DefragButton")
+muteButton = NodePath("MuteButton")
+audioPlayer = NodePath("../AudioStreamPlayer")
+mutedTexture = ExtResource("4_hg6nk")
+playingTexture = ExtResource("3_ojnsd")
 
 [node name="RAM Usage" type="Label" parent="UIManager"]
 layout_mode = 0
@@ -149,6 +160,15 @@ offset_bottom = 399.0
 theme_override_font_sizes/font_size = 26
 text = "0"
 horizontal_alignment = 2
+
+[node name="MuteButton" type="TextureButton" parent="UIManager"]
+layout_mode = 0
+offset_left = 1237.0
+offset_top = 683.0
+offset_right = 1749.0
+offset_bottom = 1195.0
+scale = Vector2(0.08, 0.08)
+texture_normal = ExtResource("3_ojnsd")
 
 [node name="Tutorial" type="Control" parent="."]
 visible = false
@@ -318,10 +338,6 @@ color = Color(1, 1, 1, 0)
 script = ExtResource("7_d85jq")
 glitchShader = SubResource("ShaderMaterial_d85jq")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("11_u2m37")
-volume_db = -8.0
-autoplay = true
-
 [connection signal="pressed" from="UIManager/DefragButton" to="UIManager" method="OnDefragButtonClicked"]
+[connection signal="pressed" from="UIManager/MuteButton" to="UIManager" method="MuteButtonClicked"]
 [connection signal="pressed" from="GameOverOverlay/RestartButton" to="UIManager" method="OnRestartButtonClicked"]
