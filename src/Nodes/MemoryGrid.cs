@@ -11,9 +11,9 @@ namespace HalfNibbleGame.Nodes;
 public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
   public const int Width = 10;
   public const int Height = 7;
-  private const float blockWidth = 18;
-  private const float blockHeight = 17;
-  private const float blockMargin = 1;
+  private const float blockWidth = 74;
+  private const float blockHeight = 70;
+  private const float blockMargin = 4;
 
   private MemoryBlock[] blocks = [];
 

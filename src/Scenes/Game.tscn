@@ -21,29 +21,28 @@ script = ExtResource("1_bg83v")
 memoryGraph = NodePath("../Graph")
 
 [node name="Wallpaper" type="Sprite2D" parent="."]
-position = Vector2(160, 90)
+position = Vector2(638.2222, 359)
+scale = Vector2(3.988889, 3.988889)
 texture = ExtResource("1_i36l2")
 
 [node name="Taskbar" type="Sprite2D" parent="."]
-position = Vector2(160, 90)
+position = Vector2(638.2222, 359)
+scale = Vector2(3.988889, 3.988889)
 texture = ExtResource("2_mm2k5")
 
 [node name="TaskManager" parent="." instance=ExtResource("3_6wgcs")]
-position = Vector2(111, 12)
-
-[node name="Extent" type="Marker2D" parent="."]
-position = Vector2(320, 180)
-gizmo_extents = 4.0
+position = Vector2(48, 51)
+scale = Vector2(4, 4)
 
 [node name="MemoryGrid" type="Node2D" parent="."]
-position = Vector2(76, 27)
+position = Vector2(295, 104)
 script = ExtResource("4_6wgcs")
 
 [node name="ProgressBar" type="ReferenceRect" parent="."]
-offset_left = 275.0
-offset_top = 36.0
-offset_right = 304.0
-offset_bottom = 42.0
+offset_left = 1096.0
+offset_top = 138.0
+offset_right = 1220.0
+offset_bottom = 161.0
 script = ExtResource("7_35kcs")
 
 [node name="Progress" type="ColorRect" parent="ProgressBar"]
@@ -54,5 +53,6 @@ grow_vertical = 2
 color = Color(0.9121169, 0.49450552, 0.25197247, 1)
 
 [node name="Graph" parent="." instance=ExtResource("8_2xgsq")]
-position = Vector2(274, 63)
+position = Vector2(1094, 261)
+scale = Vector2(4, 4)
 graphColor = Color(0.9137255, 0.49411765, 0.2509804, 1)

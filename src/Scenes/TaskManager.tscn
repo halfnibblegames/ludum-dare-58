@@ -7,7 +7,7 @@
 script = ExtResource("1_f410c")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(50, 75)
+position = Vector2(149, 74)
 texture = ExtResource("1_ujhne")
 metadata/_aseprite_wizard_interface_config_ = {
 "pending_changes": {
