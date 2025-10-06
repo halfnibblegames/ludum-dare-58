@@ -83,7 +83,7 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
       if (block.IsFree) {
         scoreTracker.MemoryFreed();
         streak++;
-        streakCooldown = 0.3;
+        streakCooldown = 1.2;
         Global.Services.Get<SoundPlayer>().PlayConfirm(streak);
       }
 
