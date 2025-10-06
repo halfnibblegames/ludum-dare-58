@@ -41,9 +41,9 @@ script = ExtResource("4_6wgcs")
 
 [node name="ProgressBar" type="ReferenceRect" parent="."]
 offset_left = 275.0
-offset_top = 91.0
+offset_top = 36.0
 offset_right = 304.0
-offset_bottom = 97.0
+offset_bottom = 42.0
 script = ExtResource("7_35kcs")
 
 [node name="Progress" type="ColorRect" parent="ProgressBar"]
@@ -54,5 +54,5 @@ grow_vertical = 2
 color = Color(0.9121169, 0.49450552, 0.25197247, 1)
 
 [node name="Graph" parent="." instance=ExtResource("8_2xgsq")]
-position = Vector2(274, 36)
+position = Vector2(274, 63)
 graphColor = Color(0.9137255, 0.49411765, 0.2509804, 1)
