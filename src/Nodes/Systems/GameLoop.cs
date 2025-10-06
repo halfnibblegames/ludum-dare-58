@@ -215,7 +215,7 @@ public sealed partial class GameLoop : Node {
     // One in five times, if there is no virus yet, add a virus.
     if (openingCount > 0 && !taskManager.Programs.Any(p => p is Virus) && rng.Randf() < 0.2) {
       openingCount--;
-      programsToOpen.Add(new Virus(taskManager, taskManager.GetNextColor()));
+      programsToOpen.Add(new Virus(taskManager, selectRandomVirusName(taskManager), taskManager.GetNextColor()));
     }
 
     programsToOpen.AddRange(
@@ -238,6 +238,16 @@ public sealed partial class GameLoop : Node {
     }
 
     return availableNames.Concat(Enumerable.Range(0, count - availableNames.Count).Select(i => $"Program{i}")).ToList();
+  }
+
+  private string selectRandomVirusName(ITaskManager taskManager) {
+    var existingNames = taskManager.Programs.Select(p => p.Name).ToHashSet();
+    var availableNames = Program.VirusNames.Where(n => !existingNames.Contains(n)).ToList();
+    if (availableNames.Count == 0) {
+      return "Rick Astley"; // The probability that this happens...
+    }
+
+    return availableNames[rng.RandiRange(0, availableNames.Count)];
   }
 
   public void Defrag() {

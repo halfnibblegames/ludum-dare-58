@@ -59,23 +59,61 @@ public class Program(ITaskManager taskManager, string name, Color color) {
   }
 
   public static readonly ImmutableArray<string> PossibleNames = [
-    "PhotoStore",
-    "Goggle Ride",
-    "Goggle Vroom",
-    "Disharmony",
-    "EarthMammal",
-    "Gopoint",
-    "Paint4D",
-    "Watervapor",
-    "Manufacturio",
+    "Facebork",
+    "Insta-ham",
+    "Blickclok",
+    "Xcretions",
+    "RegretIt",
+    "Discourt",
+    "WorkBook",
+    "SinkedIn",
+    "WhassUp",
+    "RockBlox",
+    "FightNight",
+    "SusBus",
+    "Block game",
+    "Legend of L0nk",
     "Underwatch",
-    "Recycling bin",
-    "VisageTome Messenger",
-    "Cosmic Critter Chess"
+    "Vaporrant",
+    "Condense",
+    "Epiq Shames",
+    "Googol Dorks",
+    "Microword",
+    "X-Cell",
+    "SnoozeDeck",
+    "Snack",
+    "Zoomers Meet",
+    "Banana",
+    "Jungle cart",
+    "DoorCrash",
+    "BnBarely",
+    "Chroam",
+    "Safurry",
+    "FireFerret",
+    "Edgy",
+    "GitGud",
+    "Windy ohs",
+    "SnackOS",
+    "ByteMuch",
+    "Sweatify",
+    "Spendr",
+    "Tender",
+    "ToastIQ"
+  ];
+
+  public static readonly ImmutableArray<string> VirusNames = [
+    "N3URAL",
+    "System32",
+    "RAMZilla",
+    "420BlazeIt.sys",
+    "Dankware",
+    "Byterot",
+    "Horsey.exe",
+    "FreeStuff.zip"
   ];
 }
 
-public class Virus(ITaskManager taskManager, Color color) : Program(taskManager, "TrOjAn HoRsE", color) {
+public class Virus(ITaskManager taskManager, string name, Color color) : Program(taskManager, name, color) {
   // We keep running, even if we lose memory.
   protected override bool ShouldCrashOnFree => false;
 
