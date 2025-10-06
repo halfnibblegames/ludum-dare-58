@@ -250,7 +250,7 @@ public sealed partial class GameLoop : Node {
       return "Rick Astley"; // The probability that this happens...
     }
 
-    return availableNames[rng.RandiRange(0, availableNames.Count)];
+    return availableNames[rng.RandiRange(0, availableNames.Count - 1)];
   }
 
   public void Defrag() {
