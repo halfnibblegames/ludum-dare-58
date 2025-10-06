@@ -29,9 +29,9 @@ public class Program(ITaskManager taskManager, string name, Color color) {
     if (newMemory.Count != AllocatedMemory.Count) {
       GD.PushError("Different memory usage");
     }
+
     AllocatedMemory.Clear();
-    foreach (var block in newMemory)
-    {
+    foreach (var block in newMemory) {
       AllocatedMemory.Add(block);
     }
   }
@@ -59,61 +59,23 @@ public class Program(ITaskManager taskManager, string name, Color color) {
   }
 
   public static readonly ImmutableArray<string> PossibleNames = [
-    "Facebork",
-    "Insta-ham",
-    "Blickclok",
-    "Xcretions",
-    "RegretIt",
-    "Discourt",
-    "WorkBook",
-    "SinkedIn",
-    "WhassUp",
-    "RockBlox",
-    "FightNight",
-    "SusBus",
-    "Block game",
-    "Legend of L0nk",
+    "PhotoStore",
+    "Goggle Ride",
+    "Goggle Vroom",
+    "Disharmony",
+    "EarthMammal",
+    "Gopoint",
+    "Paint4D",
+    "Watervapor",
+    "Manufacturio",
     "Underwatch",
-    "Vaporrant",
-    "Condense",
-    "Epiq Shames",
-    "Googol Dorks",
-    "Microword",
-    "X-Cell",
-    "SnoozeDeck",
-    "Snack",
-    "Zoomers Meet",
-    "Banana",
-    "Jungle cart",
-    "DoorCrash",
-    "BnBarely",
-    "Chroam",
-    "Safurry",
-    "FireFerret",
-    "Edgy",
-    "GitGud",
-    "Windy ohs",
-    "SnackOS",
-    "ByteMuch",
-    "Sweatify",
-    "Spendr",
-    "Tender",
-    "ToastIQ"
-  ];
-
-  public static readonly ImmutableArray<string> VirusNames = [
-    "N3URAL",
-    "System32",
-    "RAMZilla",
-    "420BlazeIt.sys",
-    "Dankware",
-    "Byterot",
-    "Horsey.exe",
-    "FreeStuff.zip"
+    "Recycling bin",
+    "VisageTome Messenger",
+    "Cosmic Critter Chess"
   ];
 }
 
-public class Virus(ITaskManager taskManager, string name, Color color) : Program(taskManager, name, color) {
+public class Virus(ITaskManager taskManager, Color color) : Program(taskManager, "TrOjAn HoRsE", color) {
   // We keep running, even if we lose memory.
   protected override bool ShouldCrashOnFree => false;
 
@@ -124,6 +86,7 @@ public class Virus(ITaskManager taskManager, string name, Color color) : Program
       if (adjacentBlocks.Count == 0) {
         GD.PushWarning("There should always be adjacent blocks");
       }
+
       var pickedBlock = adjacentBlocks[rng.RandiRange(0, adjacentBlocks.Count - 1)];
       attemptToSpread(pickedBlock);
     }
@@ -134,11 +97,13 @@ public class Virus(ITaskManager taskManager, string name, Color color) : Program
     if (block.AssignedProgram is Virus) {
       return;
     }
+
     // Spread into an empty block.
     if (block.IsFree) {
       block.AssignProgram(this);
       return;
     }
+
     // Block is already assigned to a different program, see if there is at least two virus tiles adjacent before
     // corrupting.
     var adjacentVirusCount = block.AdjacentBlocks.Count(b => b.AssignedProgram is Virus);

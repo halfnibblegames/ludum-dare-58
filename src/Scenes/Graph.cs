@@ -40,8 +40,10 @@ public partial class Graph : Node2D {
 
     var points = new Vector2[dataPoints.Count];
     for (var i = 0; i < dataPoints.Count; i++) {
-      points[i] = new Vector2(Mathf.Round(horizontalDiff * i), reference.Size.Y - Mathf.Round(verticalFactor * dataPoints[i]));
+      points[i] = new Vector2(Mathf.Round(horizontalDiff * i),
+        reference.Size.Y - Mathf.Round(verticalFactor * dataPoints[i]));
     }
+
     dataLine.SetPoints(points);
   }
 }
