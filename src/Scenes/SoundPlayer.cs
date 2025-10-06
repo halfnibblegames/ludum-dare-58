@@ -5,7 +5,6 @@ using HalfNibbleGame.Autoload;
 namespace HalfNibbleGame.Scenes;
 
 public partial class SoundPlayer : Node {
-
   private AudioStreamPlayer? player;
 
   [Export] private AudioStream? confirm;

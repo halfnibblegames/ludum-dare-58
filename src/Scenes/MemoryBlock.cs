@@ -57,6 +57,7 @@ public partial class MemoryBlock : Area2D {
         background.Frame = 1;
       }
     }
+
     if (lightSprite is not null) {
       lightSprite.Visible = shouldLightUp;
     }
@@ -72,6 +73,7 @@ public partial class MemoryBlock : Area2D {
     if (Global.Instance.DimFreeMemory && AssignedProgram is { IsDead: true }) {
       color = new Color(color.R, color.G, color.B, 0.5f);
     }
+
     setColor(color);
   }
 
@@ -115,6 +117,7 @@ public partial class MemoryBlock : Area2D {
     if (background is not null) {
       background.Modulate = c;
     }
+
     if (colorRect is not null) {
       colorRect.Color = c;
     }

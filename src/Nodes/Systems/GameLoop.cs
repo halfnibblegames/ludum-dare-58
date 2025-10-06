@@ -73,8 +73,7 @@ public sealed partial class GameLoop : Node {
     }
   }
 
-  private void endGarbageCollecting()
-  {
+  private void endGarbageCollecting() {
     var perfect = checkPerfect();
 
     updateScore(perfect);
@@ -151,7 +150,8 @@ public sealed partial class GameLoop : Node {
       }
     }
 
-    if (cycleNumber != 1) { // No more tutorial needed
+    if (cycleNumber != 1) {
+      // No more tutorial needed
       startGarbageCollecting();
       return;
     }
@@ -173,8 +173,7 @@ public sealed partial class GameLoop : Node {
     planNewPrograms(taskManager, minPrograms, closingCount);
   }
 
-  private void planExistingPrograms(ITaskManager taskManager, int minPrograms, out int closingCount)
-  {
+  private void planExistingPrograms(ITaskManager taskManager, int minPrograms, out int closingCount) {
     var existingPrograms = new List<Program>(taskManager.Programs);
     Random.Shared.Shuffle(CollectionsMarshal.AsSpan(existingPrograms));
 
@@ -190,6 +189,7 @@ public sealed partial class GameLoop : Node {
     foreach (var p in programsToClose.Where(p => p is not Virus)) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.Kill());
     }
+
     foreach (var p in programsToSimulate) {
       Animations.Animations.DoDelayed(rng.RandfRange(0, simulationDuration), () => p.SimulateCycle(rng));
     }

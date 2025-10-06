@@ -68,8 +68,7 @@ public partial class MemoryGrid : Node2D, IEnumerable<MemoryBlock> {
   }
 
   private void simulateClickAt(Vector2 position) {
-    foreach (var block in blocks)
-    {
+    foreach (var block in blocks) {
       if (!block.TrySimulateClick(position, out var freedProgram)) continue;
 
       var scoreTracker = Global.Services.Get<ScoreTracker>();
