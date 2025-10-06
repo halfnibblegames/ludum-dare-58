@@ -215,7 +215,7 @@ public sealed partial class GameLoop : Node {
     var programsToOpen = new List<Program>();
 
     // One in five times, if there is no virus yet, add a virus.
-    if (openingCount > 0 && !taskManager.Programs.Any(p => p is Virus) && rng.Randf() < 0.2) {
+    if (openingCount > 0 && !taskManager.Programs.Any(p => p is Virus) && rng.Randf() < 0.2 && cycleNumber > 1) {
       openingCount--;
       programsToOpen.Add(new Virus(taskManager, selectRandomVirusName(taskManager), taskManager.GetNextColor()));
     }
