@@ -26,7 +26,7 @@ public partial class TaskManager : Node2D, ITaskManager {
     Color.FromHtml("2f4f4f"), // dark slate gray
     Color.FromHtml("228b22"), // forest green
     Color.FromHtml("7b68ee"), // medium slate blue
-    Color.FromHtml("ff8c00"), // dark orange
+    Color.FromHtml("8b4513"), // saddle brown
     Color.FromHtml("9acd32"), // yellow green
     Color.FromHtml("00ff7f"), // spring green
     Color.FromHtml("dc143c"), // crimson
