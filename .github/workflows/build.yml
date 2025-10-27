@@ -34,7 +34,7 @@ jobs:
           preset: ${{ matrix.platform }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.platform }}
           path: ${{ github.workspace }}/${{ steps.build.outputs.build }}
